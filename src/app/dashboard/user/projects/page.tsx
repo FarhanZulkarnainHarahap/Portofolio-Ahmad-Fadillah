@@ -6,40 +6,26 @@ import { PageHeader } from "@/components/user/PageHeader";
 import { Section } from "@/components/user/Section";
 import { getPublicProjects } from "@/services/project.server-service";
 
-const fallbackProjects: Project[] = [
-  {
-    id: "hr-dashboard",
-    title: "HR Dashboard & Employee Data Analytics",
-    slug: "hr-dashboard-employee-data-analytics",
-    shortDescription: "Mengembangkan dashboard interaktif untuk memonitor data karyawan dan insights HR yang mendukung pengambilan keputusan berbasis data.",
-    category: { name: "Data Analytics", slug: "hr-analytics" },
-    metrics: [
-      { id: "sources", label: "Sumber Data Terintegrasi", value: "6", unit: "+" },
-      { id: "dashboards", label: "Dashboard & Visualisasi", value: "12", unit: "+" },
-      { id: "speed", label: "Peningkatan Kecepatan Pelaporan", value: "30", unit: "%" },
-    ],
-    isFeatured: true,
-  },
-  { id: "recruitment", title: "Recruitment Process Improvement", slug: "recruitment-process-improvement", shortDescription: "Merancang ulang proses rekrutmen untuk meningkatkan efisiensi dan kualitas kandidat.", category: { name: "Recruitment", slug: "recruitment" } },
-  { id: "leadership", title: "Leadership Training Program", slug: "leadership-training-program", shortDescription: "Merancang program pelatihan kepemimpinan berbasis kompetensi.", category: { name: "L&D", slug: "learning" } },
-  { id: "onboarding", title: "Employee Onboarding System", slug: "employee-onboarding-system", shortDescription: "Mengembangkan sistem onboarding digital untuk mempercepat adaptasi karyawan baru.", category: { name: "Onboarding", slug: "onboarding" } },
-  { id: "analytics", title: "People Analytics Reporting", slug: "people-analytics-reporting", shortDescription: "Menyusun laporan people analytics untuk mengidentifikasi tren SDM dan peluang perbaikan.", category: { name: "People Analytics", slug: "people-analytics" } },
-];
-
 export default async function ProjectsPage() {
   const response = await getPublicProjects("limit=24").catch(() => null);
-  const projects = response?.data?.length ? response.data : fallbackProjects;
+  const projects = response?.data ?? [];
   const featured = projects.find((project) => project.isFeatured) ?? projects[0];
   const rest = projects.filter((project) => project.id !== featured?.id);
 
   return (
     <>
       <PageHeader title="Proyek" description="Proyek HR yang berdampak pada organisasi dan karyawan." />
-      <Section title="Setiap proyek dirancang untuk menyelesaikan tantangan HR nyata dengan pendekatan strategis dan berbasis data.">
-        {featured ? <FeaturedProject project={featured} /> : null}
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
-          {rest.slice(0, 5).map((project, index) => <ProjectCard key={project.id} project={project} index={index} />)}
-        </div>
+      <Section title="Proyek akan tampil dari data yang kamu input melalui dashboard admin.">
+        {featured ? (
+          <>
+            <FeaturedProject project={featured} />
+            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+              {rest.slice(0, 5).map((project, index) => <ProjectCard key={project.id} project={project} index={index} />)}
+            </div>
+          </>
+        ) : (
+          <EmptyState text="Belum ada proyek publik. Tambahkan proyek dari dashboard admin saat kontennya sudah siap." />
+        )}
       </Section>
     </>
   );
@@ -58,9 +44,8 @@ function FeaturedProject({ project }: { project: Project }) {
         <h2 className="font-serif text-4xl font-semibold leading-tight text-[color:var(--text-primary)]">{project.title}</h2>
         <p className="mt-5 max-w-2xl leading-7 text-[color:var(--text-secondary)]">{project.shortDescription}</p>
         <div className="mt-5 flex flex-wrap gap-2">
-          {["Data Analytics", "Dashboard", "HR Metrics", "Power BI"].map((tag) => (
-            <span key={tag} className="rounded-[6px] bg-[color:var(--surface-soft)] px-3 py-1 text-sm text-[color:var(--text-secondary)]">{tag}</span>
-          ))}
+          {project.category?.name ? <span className="rounded-[6px] bg-[color:var(--surface-soft)] px-3 py-1 text-sm text-[color:var(--text-secondary)]">{project.category.name}</span> : null}
+          {project.year ? <span className="rounded-[6px] bg-[color:var(--surface-soft)] px-3 py-1 text-sm text-[color:var(--text-secondary)]">{project.year}</span> : null}
         </div>
         <div className="mt-8 grid gap-4 sm:grid-cols-3">
           {(project.metrics ?? []).slice(0, 3).map((metric, index) => (
@@ -93,6 +78,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       </div>
     </Link>
   );
+}
+
+function EmptyState({ text }: { text: string }) {
+  return <div className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-8 text-[color:var(--text-secondary)]">{text}</div>;
 }
 
 function iconFor(index: number) {

@@ -12,7 +12,7 @@ import {
   FiPhone,
   FiUsers,
 } from "react-icons/fi";
-import type { Expertise, Profile, Project, SimpleContent, Statistic } from "@/types/api";
+import type { Expertise, Profile, Project, Statistic } from "@/types/api";
 import { getPublicAchievements } from "@/services/achievement.service";
 import { getPublicCertificates } from "@/services/certificate.service";
 import { getPublicProfile } from "@/services/profile.server-service";
@@ -48,24 +48,6 @@ const fallbackTools: Expertise[] = [
   { id: "notion", name: "Notion", category: { name: "Tools" } },
 ];
 
-const fallbackProjects: Project[] = [
-  {
-    id: "hr-dashboard",
-    title: "HR Dashboard & Employee Data Analytics",
-    slug: "hr-dashboard-employee-data-analytics",
-    shortDescription:
-      "Membangun dashboard interaktif untuk monitoring data karyawan dan insights HR yang mendukung pengambilan keputusan berbasis data.",
-    category: { name: "Data Analytics", slug: "hr-analytics" },
-    metrics: [{ id: "metric", label: "Dashboard & Visualisasi", value: "12", unit: "+" }],
-  },
-];
-
-const fallbackAchievements: SimpleContent[] = [
-  { id: "engagement", title: "Employee Engagement Initiative", description: "Meningkatkan engagement score hingga 18% melalui program internal yang terstruktur." },
-  { id: "process", title: "HR Process Improvement", description: "Mengoptimalkan proses rekrutmen sehingga mengurangi time-to-hire hingga 30%." },
-  { id: "training", title: "Training Program Impact", description: "Merancang program pelatihan yang meningkatkan kompetensi karyawan." },
-];
-
 export async function HomePage() {
   const [profile, stats, expertise, projects, achievements, certifications] = await Promise.all([
     getPublicProfile().catch(() => null),
@@ -79,8 +61,8 @@ export async function HomePage() {
   const person = { ...fallbackProfile, ...(profile?.data ?? {}) } as Profile;
   const statisticItems = stats?.data?.length ? stats.data : fallbackStats;
   const expertiseItems = expertise?.data?.length ? expertise.data : fallbackTools;
-  const projectItems = projects?.data?.length ? projects.data : fallbackProjects;
-  const achievementItems = achievements?.data?.length ? achievements.data : fallbackAchievements;
+  const projectItems = projects?.data ?? [];
+  const achievementItems = achievements?.data ?? [];
   const certificateCount = certifications?.data?.length ?? 0;
 
   return (
@@ -131,7 +113,7 @@ export async function HomePage() {
         </div>
       </section>
 
-      <section className="section-shell grid gap-5 py-5 lg:grid-cols-[1fr_1.05fr_0.95fr]">
+      <section className="section-shell grid gap-5 py-5 lg:grid-cols-3">
         <article className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
           <SectionTitle icon={<FiBookOpen />} title="Spesialisasi & Tools" />
           <div className="mt-5 grid gap-5 sm:grid-cols-2">
@@ -153,33 +135,44 @@ export async function HomePage() {
           <TextLink href="/about">Lihat semua keahlian</TextLink>
         </article>
 
-        <article className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
-          <div className="flex items-center justify-between gap-4">
-            <SectionTitle icon={<FiBriefcase />} title="Proyek Unggulan" />
-            <TextLink href="/projects" compact>Lihat Semua Proyek</TextLink>
-          </div>
-          {projectItems[0] ? <FeaturedProject project={projectItems[0]} /> : null}
-        </article>
+        {projectItems[0] ? (
+          <article className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
+            <div className="flex items-center justify-between gap-4">
+              <SectionTitle icon={<FiBriefcase />} title="Proyek Unggulan" />
+              <TextLink href="/projects" compact>Lihat Semua Proyek</TextLink>
+            </div>
+            <FeaturedProject project={projectItems[0]} />
+          </article>
+        ) : null}
 
-        <article className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
-          <div className="flex items-center justify-between gap-4">
-            <SectionTitle icon={<FiAward />} title="Pencapaian" />
-            <TextLink href="/achievement" compact>Lihat Semua</TextLink>
-          </div>
-          <div className="mt-5 grid gap-5">
-            {achievementItems.slice(0, 3).map((item, index) => (
-              <div key={item.id} className="grid grid-cols-[44px_1fr] gap-4">
-                <span className="grid size-11 place-items-center rounded-full bg-[color:var(--surface-soft)] text-[color:var(--primary)]">
-                  {index === 0 ? <FiUsers /> : index === 1 ? <FiAward /> : <FiBookOpen />}
-                </span>
-                <div>
-                  <p className="font-semibold text-[color:var(--text-primary)]">{item.title}</p>
-                  <p className="mt-1 text-sm leading-6 text-[color:var(--text-secondary)]">{item.description}</p>
+        {achievementItems.length ? (
+          <article className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
+            <div className="flex items-center justify-between gap-4">
+              <SectionTitle icon={<FiAward />} title="Pencapaian" />
+              <TextLink href="/achievement" compact>Lihat Semua</TextLink>
+            </div>
+            <div className="mt-5 grid gap-5">
+              {achievementItems.slice(0, 3).map((item, index) => (
+                <div key={item.id} className="grid grid-cols-[44px_1fr] gap-4">
+                  <span className="grid size-11 place-items-center rounded-full bg-[color:var(--surface-soft)] text-[color:var(--primary)]">
+                    {index === 0 ? <FiUsers /> : index === 1 ? <FiAward /> : <FiBookOpen />}
+                  </span>
+                  <div>
+                    <p className="font-semibold text-[color:var(--text-primary)]">{item.title}</p>
+                    <p className="mt-1 text-sm leading-6 text-[color:var(--text-secondary)]">{item.description}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </article>
+              ))}
+            </div>
+          </article>
+        ) : (
+          <article className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
+            <SectionTitle icon={<FiAward />} title="Konten Profesional" />
+            <p className="mt-5 text-sm leading-7 text-[color:var(--text-secondary)]">
+              Proyek, pencapaian, artikel, dan sertifikat akan tampil otomatis setelah kamu input dari dashboard admin.
+            </p>
+          </article>
+        )}
       </section>
 
       <section className="section-shell pb-7">
