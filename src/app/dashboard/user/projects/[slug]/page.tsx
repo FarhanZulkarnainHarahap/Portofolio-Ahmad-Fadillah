@@ -9,7 +9,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const { slug } = await params;
   const response = await getPublicProject(slug).catch(() => null);
   const project = response?.data;
-  if (!project) return <EmptyState title="Project tidak ditemukan atau belum dipublikasikan." />;
+  if (!project) return <EmptyState title="Project tidak ditemukan." />;
 
   const info: { label: string; value: string }[] = [
     { label: "Organisasi", value: project.organization ?? "" },
@@ -22,7 +22,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     <>
       <section className="relative overflow-hidden pb-14 pt-16 sm:pb-20 sm:pt-20">
         <div className="section-shell">
-          <Link href="/dashboard/user/projects" className="inline-flex items-center gap-2 text-sm font-bold text-[color:var(--primary)]"><FiArrowLeft /> Kembali ke proyek</Link>
+          <Link href="/projects" className="inline-flex items-center gap-2 text-sm font-bold text-[color:var(--primary)]"><FiArrowLeft /> Kembali ke proyek</Link>
           <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div>
               <p className="editorial-label">{project.category?.name ?? "Case Study"}</p>
@@ -68,7 +68,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       <section className="bg-[color:var(--primary)] px-4 py-14 text-[color:var(--text-on-primary)]">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-5 sm:flex-row sm:items-center">
           <p className="font-heading text-3xl font-extrabold">Tertarik membahas project HR serupa?</p>
-          <Link className="inline-flex min-h-11 items-center justify-center rounded-full bg-[color:var(--surface)] px-5 text-sm font-bold text-[color:var(--primary)]" href="/dashboard/user/contact">Hubungi Saya</Link>
+          <Link className="inline-flex min-h-11 items-center justify-center rounded-full bg-[color:var(--surface)] px-5 text-sm font-bold text-[color:var(--primary)]" href="/contact">Hubungi Saya</Link>
         </div>
       </section>
     </>

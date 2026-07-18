@@ -35,9 +35,9 @@ export async function HomePage() {
   const expertiseItems = expertise?.data ?? [];
   const projectItems = projects?.data ?? [];
   const proofGroups = [
-    { title: "Pencapaian", href: "/dashboard/user/achievement", items: achievements?.data ?? [] },
-    { title: "Sertifikasi", href: "/dashboard/user/certificate", items: certifications?.data ?? [] },
-    { title: "Testimoni", href: "/dashboard/user/about", items: testimonials?.data ?? [] },
+    { title: "Pencapaian", href: "/achievement", items: achievements?.data ?? [] },
+    { title: "Sertifikasi", href: "/certificate", items: certifications?.data ?? [] },
+    { title: "Testimoni", href: "/about", items: testimonials?.data ?? [] },
   ].filter((group) => group.items.length);
 
   return (
@@ -62,9 +62,9 @@ export async function HomePage() {
                 {person.whatsapp ? <a className="inline-flex items-center gap-2 hover:text-[color:var(--primary)]" href={`https://wa.me/${person.whatsapp}`}><FiPhone />WhatsApp</a> : null}
               </div>
               <div className="mt-9 flex flex-wrap gap-3">
-                <ButtonLink href="/dashboard/user/projects">Lihat Proyek HR</ButtonLink>
-                <ButtonLink href="/dashboard/user/certificate" variant="secondary">Download CV</ButtonLink>
-                <ButtonLink href="/dashboard/user/contact" variant="ghost">Diskusi HR</ButtonLink>
+                <ButtonLink href="/projects">Lihat Proyek HR</ButtonLink>
+                <ButtonLink href="/certificate" variant="secondary">Download CV</ButtonLink>
+                <ButtonLink href="/contact" variant="ghost">Diskusi HR</ButtonLink>
               </div>
             </div>
           </Reveal>
@@ -92,7 +92,7 @@ export async function HomePage() {
       ) : null}
 
       {expertiseItems.length ? (
-        <Section eyebrow="Keahlian" title="Kapabilitas HR dalam format bento yang mudah dipindai." description="Area keahlian ditampilkan dari database dan disusun untuk membantu recruiter memahami kekuatan profesional dengan cepat.">
+        <Section eyebrow="Keahlian" title="Kapabilitas HR dalam format bento yang mudah dipindai." description="Area keahlian disusun untuk membantu recruiter memahami kekuatan profesional dengan cepat.">
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             {expertiseItems.slice(0, 8).map((item, index) => <ExpertiseCard key={item.id} item={item} index={index} />)}
           </div>
@@ -108,7 +108,7 @@ export async function HomePage() {
       ) : null}
 
       {projectItems.length ? (
-        <Section eyebrow="Proyek HR" title="Case study pilihan yang terhubung langsung ke data publik." description="Setiap proyek berasal dari API, hanya menampilkan konten published dan featured.">
+        <Section eyebrow="Proyek HR" title="Case study pilihan yang menunjukkan konteks, peran, dan hasil." description="Setiap proyek dirancang untuk menampilkan cara berpikir, eksekusi, dan dampak kerja Human Resources.">
           <div className="grid gap-5 lg:grid-cols-3">
             {projectItems.map((project, index) => <ProjectCard key={project.id} project={project} featured={index === 0} />)}
           </div>
@@ -127,9 +127,9 @@ export async function HomePage() {
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-6 sm:flex-row sm:items-center">
           <div>
             <p className="font-heading text-3xl font-extrabold">Siap membahas kebutuhan people dan culture?</p>
-            <p className="mt-2 max-w-2xl text-[color:var(--primary-soft)]">Kirim pesan melalui form kontak agar percakapan tersimpan rapi di dashboard admin.</p>
+            <p className="mt-2 max-w-2xl text-[color:var(--primary-soft)]">Kirim pesan melalui form kontak untuk memulai percakapan profesional.</p>
           </div>
-          <ButtonLink href="/dashboard/user/contact" variant="secondary">Hubungi Saya</ButtonLink>
+          <ButtonLink href="/contact" variant="secondary">Hubungi Saya</ButtonLink>
         </div>
       </section>
     </>
@@ -242,7 +242,7 @@ function ExperienceCard({ item, index }: { item: Experience; index: number }) {
 function ProjectCard({ project, featured }: { project: Project; featured?: boolean }) {
   const metric = project.metrics?.[0];
   return (
-    <Link href={`/dashboard/user/projects/${project.slug}`} className={`premium-card group overflow-hidden transition hover:-translate-y-1 hover:border-[color:var(--primary)] ${featured ? "lg:col-span-2" : ""}`}>
+    <Link href={`/projects/${project.slug}`} className={`premium-card group overflow-hidden transition hover:-translate-y-1 hover:border-[color:var(--primary)] ${featured ? "lg:col-span-2" : ""}`}>
       <div className="aspect-[16/9] bg-[color:var(--surface-secondary)] p-6">
         <div className="flex h-full items-end rounded-[var(--radius-md)] bg-[color:var(--primary-soft)] p-5 text-[color:var(--primary)] transition group-hover:scale-[1.02]">
           <FiBriefcase className="text-4xl" aria-hidden />

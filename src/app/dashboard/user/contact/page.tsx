@@ -11,7 +11,7 @@ export default async function ContactPage() {
 
   return (
     <>
-      <PageHeader title="Kontak" description="Kirim pesan profesional melalui form yang divalidasi dan tersimpan ke dashboard admin." />
+      <PageHeader title="Kontak" description="Kirim pesan profesional untuk peluang kerja, kolaborasi, atau diskusi Human Resources." />
       <Section eyebrow="Diskusi" title="Mari bicara tentang people, growth, dan culture." tone="strong">
         <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
           <div className="premium-card p-7">

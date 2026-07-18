@@ -8,7 +8,7 @@ export default async function AchievementsPage() {
   const items = response?.data ?? [];
   return (
     <>
-      <PageHeader title="Pencapaian" description="Evidence profesional yang sudah dipublikasikan melalui dashboard admin." />
+      <PageHeader title="Pencapaian" description="Bukti pencapaian profesional dalam perjalanan Human Resources." />
       {items.length ? <Section eyebrow="Evidence" title="Capaian yang memperkuat kredibilitas."><ContentGrid items={items} /></Section> : null}
     </>
   );

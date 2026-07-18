@@ -11,7 +11,7 @@ export default async function ProjectsPage() {
 
   return (
     <>
-      <PageHeader title="Proyek HR" description="Case study Human Resources yang sudah dipublikasikan melalui dashboard admin." />
+      <PageHeader title="Proyek HR" description="Case study Human Resources yang menampilkan konteks, peran, dan hasil kerja." />
       {projects.length ? (
         <Section eyebrow="Case Study" title="Proyek terpilih dengan konteks, peran, dan hasil." tone="strong">
           <div className="grid gap-5 lg:grid-cols-3">
@@ -27,7 +27,7 @@ function ProjectTile({ project, featured }: { project: Project; featured?: boole
   const metric = project.metrics?.[0];
 
   return (
-    <Link href={`/dashboard/user/projects/${project.slug}`} className={`premium-card group overflow-hidden transition hover:-translate-y-1 hover:border-[color:var(--primary)] ${featured ? "lg:col-span-2" : ""}`}>
+    <Link href={`/projects/${project.slug}`} className={`premium-card group overflow-hidden transition hover:-translate-y-1 hover:border-[color:var(--primary)] ${featured ? "lg:col-span-2" : ""}`}>
       <div className="aspect-[16/9] bg-[color:var(--surface-secondary)] p-6">
         <div className="flex h-full items-end rounded-[var(--radius-md)] bg-[color:var(--primary-soft)] p-5 text-[color:var(--primary)] transition group-hover:scale-[1.02]">
           <FiBriefcase className="text-4xl" aria-hidden />

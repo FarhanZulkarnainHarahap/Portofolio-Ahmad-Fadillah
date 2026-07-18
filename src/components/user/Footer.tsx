@@ -54,18 +54,31 @@ export async function Footer() {
 }
 
 function normalizeUserHref(href: string) {
+  if (href.startsWith("/dashboard/user/blog/")) return href.replace("/dashboard/user/blog", "/blog");
+  if (href.startsWith("/dashboard/user/certificate/")) return href.replace("/dashboard/user/certificate", "/certificate");
+  if (href.startsWith("/dashboard/user/projects/")) return href.replace("/dashboard/user/projects", "/projects");
+
   const map: Record<string, string> = {
-    "/": "/dashboard/user/home",
-    "/about": "/dashboard/user/about",
-    "/achievements": "/dashboard/user/achievement",
-    "/blog": "/dashboard/user/blog",
-    "/certifications": "/dashboard/user/certificate",
-    "/contact": "/dashboard/user/contact",
-    "/documents": "/dashboard/user/certificate",
-    "/experience": "/dashboard/user/experience",
-    "/expertise": "/dashboard/user/about",
-    "/projects": "/dashboard/user/projects",
-    "/testimonials": "/dashboard/user/about",
+    "/": "/",
+    "/about": "/about",
+    "/achievements": "/achievement",
+    "/blog": "/blog",
+    "/certifications": "/certificate",
+    "/contact": "/contact",
+    "/documents": "/certificate",
+    "/experience": "/experience",
+    "/expertise": "/about",
+    "/projects": "/projects",
+    "/testimonials": "/about",
+    "/dashboard/user": "/",
+    "/dashboard/user/home": "/",
+    "/dashboard/user/about": "/about",
+    "/dashboard/user/achievement": "/achievement",
+    "/dashboard/user/blog": "/blog",
+    "/dashboard/user/certificate": "/certificate",
+    "/dashboard/user/contact": "/contact",
+    "/dashboard/user/experience": "/experience",
+    "/dashboard/user/projects": "/projects",
   };
   return map[href] ?? href;
 }

@@ -30,7 +30,7 @@ export async function AdminResourceList({ title, description, resource, createHr
           <div className="grid gap-3">
             {rows.map((row) => <AdminResourceCard key={String(row.id)} row={row} />)}
           </div>
-        ) : <EmptyState title="Belum ada data pada modul ini." description="Gunakan dashboard admin atau endpoint terkait untuk menambahkan data baru." />}
+        ) : <EmptyState title="Belum ada data pada modul ini." description="Tambahkan konten baru melalui tombol aksi yang tersedia." />}
       </div>
     </div>
   );

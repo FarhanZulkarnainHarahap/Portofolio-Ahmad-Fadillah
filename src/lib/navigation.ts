@@ -1,12 +1,12 @@
 export const userNavigation = [
-  { href: "/dashboard/user/home", label: "Home" },
-  { href: "/dashboard/user/about", label: "About" },
-  { href: "/dashboard/user/experience", label: "Experience" },
-  { href: "/dashboard/user/achievement", label: "Achievement" },
-  { href: "/dashboard/user/projects", label: "Projects" },
-  { href: "/dashboard/user/certificate", label: "Certificate" },
-  { href: "/dashboard/user/blog", label: "Blog" },
-  { href: "/dashboard/user/contact", label: "Contact" },
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+  { href: "/experience", label: "Experience" },
+  { href: "/achievement", label: "Achievement" },
+  { href: "/projects", label: "Projects" },
+  { href: "/certificate", label: "Certificate" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contact", label: "Contact" },
 ] as const;
 
 export const adminNavigation = [

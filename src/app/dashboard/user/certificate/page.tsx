@@ -8,7 +8,7 @@ export default async function CertificationsPage() {
   const items = response?.data ?? [];
   return (
     <>
-      <PageHeader title="Sertifikasi" description="Sertifikasi profesional yang sudah dipublikasikan dari database." />
+      <PageHeader title="Sertifikasi" description="Sertifikasi profesional dan bukti pembelajaran berkelanjutan." />
       {items.length ? <Section eyebrow="Credentials" title="Sertifikasi dan bukti pembelajaran profesional."><ContentGrid items={items} /></Section> : null}
     </>
   );

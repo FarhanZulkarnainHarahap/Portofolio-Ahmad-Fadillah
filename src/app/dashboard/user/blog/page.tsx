@@ -8,8 +8,8 @@ export default async function BlogPage() {
   const items = response?.data ?? [];
   return (
     <>
-      <PageHeader title="Artikel" description="Tulisan Human Resources yang sudah dipublikasikan melalui dashboard admin." />
-      {items.length ? <Section eyebrow="Insights" title="Catatan dan insight profesional HR."><ContentGrid items={items} hrefFor={(item) => `/dashboard/user/blog/${item.slug}`} /></Section> : null}
+      <PageHeader title="Artikel" description="Tulisan dan insight Human Resources untuk people, growth, dan culture." />
+      {items.length ? <Section eyebrow="Insights" title="Catatan dan insight profesional HR."><ContentGrid items={items} hrefFor={(item) => `/blog/${item.slug}`} /></Section> : null}
     </>
   );
 }

@@ -9,7 +9,7 @@ export default async function ExperiencePage() {
   const items = response?.data ?? [];
   return (
     <>
-      <PageHeader title="Pengalaman" description="Timeline pengalaman Human Resources yang dipublikasikan dari dashboard admin." />
+      <PageHeader title="Pengalaman" description="Timeline pengalaman Human Resources, tanggung jawab, dan dampak kerja." />
       {items.length ? (
         <Section eyebrow="Career Timeline" title="Konteks peran, tanggung jawab, dan capaian." tone="muted">
           <div className="grid gap-6">

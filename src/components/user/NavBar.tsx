@@ -7,14 +7,14 @@ import { getPublicProfile } from "@/services/profile.server-service";
 import { getPublicSettings } from "@/services/settings.service";
 
 const fallbackItems = [
-  { id: "home", label: "Beranda", href: "/dashboard/user/home" },
-  { id: "about", label: "Tentang Saya", href: "/dashboard/user/about" },
-  { id: "experience", label: "Pengalaman", href: "/dashboard/user/experience" },
-  { id: "achievement", label: "Pencapaian", href: "/dashboard/user/achievement" },
-  { id: "projects", label: "Proyek", href: "/dashboard/user/projects" },
-  { id: "certificates", label: "Sertifikat", href: "/dashboard/user/certificate" },
-  { id: "blog", label: "Blog", href: "/dashboard/user/blog" },
-  { id: "contact", label: "Kontak", href: "/dashboard/user/contact" },
+  { id: "home", label: "Beranda", href: "/" },
+  { id: "about", label: "Tentang Saya", href: "/about" },
+  { id: "experience", label: "Pengalaman", href: "/experience" },
+  { id: "achievement", label: "Pencapaian", href: "/achievement" },
+  { id: "projects", label: "Proyek", href: "/projects" },
+  { id: "certificates", label: "Sertifikat", href: "/certificate" },
+  { id: "blog", label: "Blog", href: "/blog" },
+  { id: "contact", label: "Kontak", href: "/contact" },
 ];
 
 export async function NavBar() {
@@ -32,7 +32,7 @@ export async function NavBar() {
         className="mx-auto flex max-w-7xl items-center justify-between gap-3 rounded-full border border-[color:var(--border)] bg-[color:var(--surface)]/88 px-3 py-2 shadow-[var(--shadow-sm)] backdrop-blur-xl sm:px-4"
         aria-label="Navigasi utama"
       >
-        <BrandLogo href="/dashboard/user/home" brandName={person?.name} tagline="Human Resources Portfolio" variant="horizontal" size="sm" />
+        <BrandLogo href="/" brandName={person?.name} tagline="Human Resources Portfolio" variant="horizontal" size="sm" />
         <div className="hidden items-center gap-1 rounded-full bg-[color:var(--surface-secondary)] p-1 lg:flex">
           {navItems.map((item) => (
             <Link
@@ -47,7 +47,7 @@ export async function NavBar() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <Link
-            href="/dashboard/user/certificate"
+            href="/certificate"
             className="hidden min-h-11 items-center gap-2 rounded-full bg-[color:var(--primary)] px-4 text-sm font-bold text-[color:var(--text-on-primary)] transition hover:bg-[color:var(--primary-hover)] sm:inline-flex"
           >
             <FiDownload aria-hidden />
@@ -61,18 +61,31 @@ export async function NavBar() {
 }
 
 function normalizeUserHref(href: string) {
+  if (href.startsWith("/dashboard/user/blog/")) return href.replace("/dashboard/user/blog", "/blog");
+  if (href.startsWith("/dashboard/user/certificate/")) return href.replace("/dashboard/user/certificate", "/certificate");
+  if (href.startsWith("/dashboard/user/projects/")) return href.replace("/dashboard/user/projects", "/projects");
+
   const map: Record<string, string> = {
-    "/": "/dashboard/user/home",
-    "/about": "/dashboard/user/about",
-    "/achievements": "/dashboard/user/achievement",
-    "/blog": "/dashboard/user/blog",
-    "/certifications": "/dashboard/user/certificate",
-    "/contact": "/dashboard/user/contact",
-    "/documents": "/dashboard/user/certificate",
-    "/experience": "/dashboard/user/experience",
-    "/expertise": "/dashboard/user/about",
-    "/projects": "/dashboard/user/projects",
-    "/testimonials": "/dashboard/user/about",
+    "/": "/",
+    "/about": "/about",
+    "/achievements": "/achievement",
+    "/blog": "/blog",
+    "/certifications": "/certificate",
+    "/contact": "/contact",
+    "/documents": "/certificate",
+    "/experience": "/experience",
+    "/expertise": "/about",
+    "/projects": "/projects",
+    "/testimonials": "/about",
+    "/dashboard/user": "/",
+    "/dashboard/user/home": "/",
+    "/dashboard/user/about": "/about",
+    "/dashboard/user/achievement": "/achievement",
+    "/dashboard/user/blog": "/blog",
+    "/dashboard/user/certificate": "/certificate",
+    "/dashboard/user/contact": "/contact",
+    "/dashboard/user/experience": "/experience",
+    "/dashboard/user/projects": "/projects",
   };
   return map[href] ?? href;
 }

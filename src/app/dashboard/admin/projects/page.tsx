@@ -54,7 +54,7 @@ export default async function AdminProjectsPage() {
               </tbody>
             </table>
           </div>
-        ) : <EmptyState title="Belum ada proyek di database." description="Buat proyek pertama melalui tombol Create project." action={<Link className="inline-flex rounded-full bg-[color:var(--primary)] px-4 py-2 text-sm font-bold text-[color:var(--text-on-primary)]" href="/dashboard/admin/projects/create">Tambah project pertama</Link>} />}
+        ) : <EmptyState title="Belum ada proyek." description="Buat proyek pertama melalui tombol Create project." action={<Link className="inline-flex rounded-full bg-[color:var(--primary)] px-4 py-2 text-sm font-bold text-[color:var(--text-on-primary)]" href="/dashboard/admin/projects/create">Tambah project pertama</Link>} />}
       </div>
     </div>
   );
