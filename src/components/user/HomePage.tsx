@@ -123,11 +123,11 @@ export async function HomePage() {
         </Section>
       ) : null}
 
-      <section className="bg-[color:var(--primary)] px-4 py-16 text-white">
+      <section className="bg-[color:var(--primary)] px-4 py-16 text-[color:var(--text-on-primary)]">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-6 sm:flex-row sm:items-center">
           <div>
             <p className="font-heading text-3xl font-extrabold">Siap membahas kebutuhan people dan culture?</p>
-            <p className="mt-2 max-w-2xl text-blue-100">Kirim pesan melalui form kontak agar percakapan tersimpan rapi di dashboard admin.</p>
+            <p className="mt-2 max-w-2xl text-[color:var(--primary-soft)]">Kirim pesan melalui form kontak agar percakapan tersimpan rapi di dashboard admin.</p>
           </div>
           <ButtonLink href="/dashboard/user/contact" variant="secondary">Hubungi Saya</ButtonLink>
         </div>

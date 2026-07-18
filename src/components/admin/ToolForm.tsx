@@ -56,7 +56,7 @@ export function ToolForm({ mode, tool }: { mode: "create" | "edit"; tool?: Exper
         <label className="inline-flex items-center gap-2 text-sm font-bold text-[color:var(--text-secondary)]"><input type="checkbox" {...register("isActive")} /> Active</label>
       </FormSection>
       <div className="sticky bottom-4 flex justify-end gap-3 rounded-[var(--radius-lg)] border border-[color:var(--border)] bg-[color:var(--surface)] p-4 shadow-[var(--shadow-md)]">
-        <button className="min-h-11 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-white disabled:opacity-60" disabled={isSubmitting} type="submit">
+        <button className="min-h-11 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-[color:var(--text-on-primary)] disabled:opacity-60" disabled={isSubmitting} type="submit">
           {isSubmitting ? "Menyimpan..." : "Simpan tool"}
         </button>
         <button className="min-h-11 rounded-full border border-[color:var(--border-strong)] px-5 text-sm font-bold" type="button" onClick={() => router.push("/dashboard/admin/about/tools")}>Batal</button>

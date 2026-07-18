@@ -32,7 +32,7 @@ export function LoginForm() {
       <label className="grid gap-2 text-sm font-medium">
         Email
         <input className="form-input" type="email" {...register("email")} />
-        {errors.email ? <span className="text-xs text-red-600">{errors.email.message}</span> : null}
+        {errors.email ? <span className="text-xs text-[color:var(--danger)]">{errors.email.message}</span> : null}
       </label>
       <label className="grid gap-2 text-sm font-medium">
         Password
@@ -42,9 +42,9 @@ export function LoginForm() {
             {showPassword ? "Sembunyi" : "Lihat"}
           </button>
         </span>
-        {errors.password ? <span className="text-xs text-red-600">{errors.password.message}</span> : null}
+        {errors.password ? <span className="text-xs text-[color:var(--danger)]">{errors.password.message}</span> : null}
       </label>
-      <button className="min-h-11 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-white disabled:opacity-60" disabled={isSubmitting} type="submit">
+      <button className="min-h-11 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-[color:var(--text-on-primary)] disabled:opacity-60" disabled={isSubmitting} type="submit">
         {isSubmitting ? "Masuk..." : "Masuk"}
       </button>
     </form>

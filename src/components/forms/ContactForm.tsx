@@ -42,7 +42,7 @@ export function ContactForm() {
       </div>
       <Field label="Subjek" error={errors.subject?.message}><input className="form-input" {...register("subject")} /></Field>
       <Field label="Pesan" error={errors.message?.message}><textarea className="form-input min-h-36" {...register("message")} /></Field>
-      <button disabled={isSubmitting} className="min-h-11 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-white transition hover:bg-[color:var(--primary-hover)] disabled:opacity-60" type="submit">
+      <button disabled={isSubmitting} className="min-h-11 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-[color:var(--text-on-primary)] transition hover:bg-[color:var(--primary-hover)] disabled:opacity-60" type="submit">
         {isSubmitting ? "Mengirim..." : "Kirim Pesan"}
       </button>
     </form>

@@ -48,7 +48,7 @@ export async function NavBar() {
           <ThemeToggle />
           <Link
             href="/dashboard/user/certificate"
-            className="hidden min-h-11 items-center gap-2 rounded-full bg-[color:var(--primary)] px-4 text-sm font-bold text-white transition hover:bg-[color:var(--primary-hover)] sm:inline-flex"
+            className="hidden min-h-11 items-center gap-2 rounded-full bg-[color:var(--primary)] px-4 text-sm font-bold text-[color:var(--text-on-primary)] transition hover:bg-[color:var(--primary-hover)] sm:inline-flex"
           >
             <FiDownload aria-hidden />
             <span className="hidden sm:inline">Download CV</span>

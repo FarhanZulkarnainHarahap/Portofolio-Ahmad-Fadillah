@@ -65,10 +65,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </Section>
       ) : null}
 
-      <section className="bg-[color:var(--primary)] px-4 py-14 text-white">
+      <section className="bg-[color:var(--primary)] px-4 py-14 text-[color:var(--text-on-primary)]">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-5 sm:flex-row sm:items-center">
           <p className="font-heading text-3xl font-extrabold">Tertarik membahas project HR serupa?</p>
-          <Link className="inline-flex min-h-11 items-center justify-center rounded-full bg-white px-5 text-sm font-bold text-[color:var(--primary)]" href="/dashboard/user/contact">Hubungi Saya</Link>
+          <Link className="inline-flex min-h-11 items-center justify-center rounded-full bg-[color:var(--surface)] px-5 text-sm font-bold text-[color:var(--primary)]" href="/dashboard/user/contact">Hubungi Saya</Link>
         </div>
       </section>
     </>

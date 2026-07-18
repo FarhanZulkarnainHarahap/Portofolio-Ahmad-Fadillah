@@ -18,7 +18,7 @@ export default async function AdminProjectsPage() {
           <h1 className="mt-3 font-heading text-4xl font-extrabold">Projects</h1>
           <p className="mt-2 text-sm text-[color:var(--text-secondary)]">Create, edit, publish, and delete HR projects.</p>
         </div>
-        <Link className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-white" href="/dashboard/admin/projects/create"><FiPlus />Create project</Link>
+        <Link className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-[color:var(--text-on-primary)]" href="/dashboard/admin/projects/create"><FiPlus />Create project</Link>
       </div>
       <div className="mt-6">
         {projects.length ? (
@@ -54,7 +54,7 @@ export default async function AdminProjectsPage() {
               </tbody>
             </table>
           </div>
-        ) : <EmptyState title="Belum ada proyek di database." description="Buat proyek pertama melalui tombol Create project." action={<Link className="inline-flex rounded-full bg-[color:var(--primary)] px-4 py-2 text-sm font-bold text-white" href="/dashboard/admin/projects/create">Tambah project pertama</Link>} />}
+        ) : <EmptyState title="Belum ada proyek di database." description="Buat proyek pertama melalui tombol Create project." action={<Link className="inline-flex rounded-full bg-[color:var(--primary)] px-4 py-2 text-sm font-bold text-[color:var(--text-on-primary)]" href="/dashboard/admin/projects/create">Tambah project pertama</Link>} />}
       </div>
     </div>
   );

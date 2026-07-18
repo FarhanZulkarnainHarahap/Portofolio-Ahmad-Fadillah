@@ -17,7 +17,7 @@ export default async function AdminToolsPage() {
           <h1 className="mt-3 font-heading text-4xl font-extrabold">Tools</h1>
           <p className="mt-2 text-sm text-[color:var(--text-secondary)]">Kelola tools melalui data expertise yang tersedia dari Express API.</p>
         </div>
-        <Link className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-white" href="/dashboard/admin/about/tools/create"><FiPlus />Tambah Tool</Link>
+        <Link className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-[color:var(--text-on-primary)]" href="/dashboard/admin/about/tools/create"><FiPlus />Tambah Tool</Link>
       </div>
       <div className="mt-6">
         {tools.length ? (

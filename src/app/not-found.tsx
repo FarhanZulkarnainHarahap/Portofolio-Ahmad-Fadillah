@@ -8,7 +8,7 @@ export default function NotFound() {
         <BrandLogo variant="stacked" size="lg" showTagline />
         <h1 className="mt-8 font-heading text-3xl font-extrabold">Halaman tidak ditemukan</h1>
         <p className="mt-3 text-sm leading-6 text-[color:var(--text-secondary)]">Konten yang Anda cari mungkin sudah dipindahkan.</p>
-        <Link className="mt-6 inline-flex rounded-full bg-[color:var(--primary)] px-5 py-3 text-sm font-bold text-white" href="/dashboard/user/home">Kembali ke portofolio</Link>
+        <Link className="mt-6 inline-flex rounded-full bg-[color:var(--primary)] px-5 py-3 text-sm font-bold text-[color:var(--text-on-primary)]" href="/dashboard/user/home">Kembali ke portofolio</Link>
       </div>
     </section>
   );

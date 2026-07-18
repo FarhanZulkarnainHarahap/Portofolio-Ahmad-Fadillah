@@ -26,7 +26,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <a
           href="#main-content"
-          className="sr-only z-50 rounded-md bg-primary px-4 py-3 text-sm font-bold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+          className="sr-only z-50 rounded-md bg-primary px-4 py-3 text-sm font-bold text-[color:var(--text-on-primary)] focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
         >
           Lewati ke konten utama
         </a>

@@ -23,7 +23,7 @@ export async function AdminResourceList({ title, description, resource, createHr
           <h1 className="mt-3 font-heading text-4xl font-extrabold capitalize">{title}</h1>
           <p className="mt-2 text-sm text-[color:var(--text-secondary)]">{description}</p>
         </div>
-        {createHref ? <Link className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-white" href={createHref}><FiPlus />Tambah</Link> : null}
+        {createHref ? <Link className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-[color:var(--text-on-primary)]" href={createHref}><FiPlus />Tambah</Link> : null}
       </div>
       <div className="mt-6">
         {rows.length ? (

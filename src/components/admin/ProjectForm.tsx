@@ -101,7 +101,7 @@ export function ProjectForm({ mode, project }: { mode: "create" | "edit"; projec
           <label className="inline-flex items-center gap-2"><input type="checkbox" {...register("isFeatured")} /> Featured</label>
         </div>
         <div className="flex gap-3">
-          <button className="min-h-11 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-white disabled:opacity-60" disabled={isSubmitting} type="submit">
+          <button className="min-h-11 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-[color:var(--text-on-primary)] disabled:opacity-60" disabled={isSubmitting} type="submit">
             {isSubmitting ? "Saving..." : "Save project"}
           </button>
           <button className="min-h-11 rounded-full border border-[color:var(--border-strong)] px-5 text-sm font-bold" type="button" onClick={() => router.push("/dashboard/admin/projects")}>Cancel</button>
