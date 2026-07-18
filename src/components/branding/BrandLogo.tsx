@@ -14,8 +14,8 @@ type BrandLogoProps = {
 };
 
 const sizeMap: Record<BrandLogoSize, { mark: string; name: string; tagline: string; gap: string }> = {
-  sm: { mark: "size-9", name: "text-sm", tagline: "text-[10px]", gap: "gap-2" },
-  md: { mark: "size-11", name: "text-base", tagline: "text-[11px]", gap: "gap-3" },
+  sm: { mark: "size-9", name: "text-base", tagline: "text-[10px]", gap: "gap-2" },
+  md: { mark: "size-10", name: "text-2xl", tagline: "text-[11px]", gap: "gap-3" },
   lg: { mark: "size-14", name: "text-xl", tagline: "text-xs", gap: "gap-3" },
   xl: { mark: "size-20", name: "text-3xl", tagline: "text-sm", gap: "gap-4" },
 };
@@ -39,7 +39,7 @@ export function BrandLogo({
       <BrandMark className={cfg.mark} />
       {showText ? (
         <span className="grid leading-none">
-          <span className={`font-heading ${cfg.name} font-extrabold tracking-normal text-[color:var(--text-primary)]`}>{resolvedName}</span>
+          <span className={`font-serif ${cfg.name} font-semibold tracking-normal text-[color:var(--text-primary)]`}>{resolvedName}</span>
           {showTagline || variant === "primary" || variant === "stacked" ? (
             <span className={`mt-1 font-semibold uppercase tracking-[0.16em] text-[color:var(--text-muted)] ${cfg.tagline}`}>{resolvedTagline}</span>
           ) : null}

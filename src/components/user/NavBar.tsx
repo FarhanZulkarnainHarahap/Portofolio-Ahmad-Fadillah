@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { FiDownload } from "react-icons/fi";
 import { BrandLogo } from "@/components/branding/BrandLogo";
+import { ActiveNavLinks } from "./ActiveNavLinks";
 import { MobileNav } from "./MobileNav";
-import { ThemeToggle } from "@/components/user/ThemeToggle";
 import { getPublicProfile } from "@/services/profile.server-service";
 import { getPublicSettings } from "@/services/settings.service";
 
@@ -27,31 +27,17 @@ export async function NavBar() {
   const person = profile?.data;
 
   return (
-    <header className="sticky top-4 z-40 px-4">
-      <nav
-        className="mx-auto flex max-w-7xl items-center justify-between gap-3 rounded-full border border-[color:var(--border)] bg-[color:var(--surface)]/88 px-3 py-2 shadow-[var(--shadow-sm)] backdrop-blur-xl sm:px-4"
-        aria-label="Navigasi utama"
-      >
-        <BrandLogo href="/" brandName={person?.name} tagline="Human Resources Portfolio" variant="horizontal" size="sm" />
-        <div className="hidden items-center gap-1 rounded-full bg-[color:var(--surface-secondary)] p-1 lg:flex">
-          {navItems.map((item) => (
-            <Link
-              key={item.id}
-              className="rounded-full px-3 py-2 text-sm font-semibold text-[color:var(--text-secondary)] transition hover:bg-[color:var(--surface)] hover:text-[color:var(--primary)]"
-              href={item.href}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
+    <header className="sticky top-0 z-40 border-b border-[color:var(--border)] bg-[color:var(--surface)]/92 px-4 backdrop-blur-xl">
+      <nav className="mx-auto flex max-w-[1500px] items-center justify-between gap-4" aria-label="Navigasi utama">
+        <BrandLogo href="/" brandName={person?.name} tagline="Human Resources Portfolio" variant="horizontal" size="md" />
+        <ActiveNavLinks items={navItems} />
         <div className="flex items-center gap-2">
-          <ThemeToggle />
           <Link
             href="/certificate"
-            className="hidden min-h-11 items-center gap-2 rounded-full bg-[color:var(--primary)] px-4 text-sm font-bold text-[color:var(--text-on-primary)] transition hover:bg-[color:var(--primary-hover)] sm:inline-flex"
+            className="hidden min-h-11 items-center gap-2 rounded-[6px] bg-[color:var(--primary)] px-5 text-sm font-bold text-[color:var(--text-on-primary)] shadow-[var(--shadow-sm)] transition hover:bg-[color:var(--primary-hover)] sm:inline-flex"
           >
             <FiDownload aria-hidden />
-            <span className="hidden sm:inline">Download CV</span>
+            <span>Download CV</span>
           </Link>
           <MobileNav items={navItems} brandName={person?.name} tagline="Human Resources Portfolio" />
         </div>

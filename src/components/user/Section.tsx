@@ -22,7 +22,7 @@ export function Section({ eyebrow, title, description, children, tone = "default
         <div className="mb-9 grid gap-4 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <div>
             {eyebrow ? <p className="editorial-label">{eyebrow}</p> : null}
-            <h2 className="mt-3 max-w-3xl font-heading text-3xl font-extrabold leading-tight tracking-normal text-[color:var(--text-primary)] sm:text-5xl">
+            <h2 className="mt-3 max-w-3xl font-serif text-4xl font-semibold leading-tight tracking-normal text-[color:var(--text-primary)] sm:text-5xl">
               {title}
             </h2>
           </div>

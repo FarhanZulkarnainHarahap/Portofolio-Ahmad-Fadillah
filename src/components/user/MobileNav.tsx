@@ -42,11 +42,11 @@ export function MobileNav({ items, brandName, tagline }: { items: NavItem[]; bra
         aria-label={open ? "Tutup menu" : "Buka menu"}
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className="inline-flex size-11 items-center justify-center rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] text-[color:var(--text-primary)]"
+        className="inline-flex size-11 items-center justify-center rounded-[6px] border border-[color:var(--border)] bg-[color:var(--surface)] text-[color:var(--text-primary)]"
       >
         {open ? <FiX aria-hidden /> : <FiMenu aria-hidden />}
       </button>
-      <div ref={panelRef} className="invisible fixed inset-x-4 top-20 z-50 rounded-[var(--radius-lg)] border border-[color:var(--border)] bg-[color:var(--surface)] p-5 opacity-0 shadow-[var(--shadow-md)]">
+      <div ref={panelRef} className="invisible fixed inset-x-4 top-20 z-50 rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-5 opacity-0 shadow-[var(--shadow-md)]">
         <BrandLogo brandName={brandName} tagline={tagline} variant="horizontal" size="sm" showTagline />
         <nav className="mt-5 grid gap-2" aria-label="Navigasi mobile">
           {items.map((item) => (
@@ -54,7 +54,7 @@ export function MobileNav({ items, brandName, tagline }: { items: NavItem[]; bra
               key={item.id}
               href={item.href}
               onClick={() => setOpen(false)}
-              className="rounded-[var(--radius-sm)] px-3 py-3 text-sm font-bold text-[color:var(--text-secondary)] transition hover:bg-[color:var(--primary-soft)] hover:text-[color:var(--primary)]"
+              className="rounded-[6px] px-3 py-3 text-sm font-bold text-[color:var(--text-secondary)] transition hover:bg-[color:var(--primary-soft)] hover:text-[color:var(--primary)]"
             >
               {item.label}
             </Link>

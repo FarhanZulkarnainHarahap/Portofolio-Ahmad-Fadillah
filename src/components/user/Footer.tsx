@@ -13,45 +13,35 @@ export async function Footer() {
   const person = profile?.data;
 
   return (
-    <footer className="bg-[color:var(--secondary)] text-[color:var(--text-on-dark)]">
-      <div className="section-shell grid gap-10 py-12 lg:grid-cols-[1.4fr_0.8fr_0.8fr] lg:py-16">
+    <footer className="border-t border-[color:var(--border)] bg-[color:var(--surface-soft)]">
+      <div className="mx-auto grid max-w-[1500px] items-center gap-5 px-4 py-6 text-sm text-[color:var(--text-secondary)] lg:grid-cols-[1fr_auto_1fr]">
         <div>
-          <BrandLogo
-            brandName={person?.name}
-            tagline="Human Resources Portfolio"
-            variant="primary"
-            size="md"
-            showTagline
-            className="[--text-primary:var(--text-on-dark)] [--text-muted:var(--border-strong)]"
-          />
-          <p className="mt-5 max-w-md text-sm leading-7 text-[color:var(--border-strong)]">
-            Portofolio profesional Human Resources yang menampilkan pengalaman, proyek, dan bukti kerja berbasis data.
-          </p>
-          {person?.publicEmail ? <a className="mt-4 inline-flex text-sm font-semibold text-[color:var(--primary)] hover:text-[color:var(--text-on-dark)]" href={`mailto:${person.publicEmail}`}>{person.publicEmail}</a> : null}
+          <BrandLogo brandName="Portofolio HR" tagline="Human Resources Portfolio" variant="horizontal" size="sm" />
+          <p className="mt-1 text-xs">© {new Date().getFullYear()} {person?.name ?? "Ahamad Fadillah Harahap"}. All rights reserved.</p>
         </div>
-        {footerNav.length ? (
-          <div>
-            <p className="text-sm font-semibold text-[color:var(--text-on-dark)]">Navigasi</p>
-            <div className="mt-3 grid gap-2">
-              {footerNav.map((item) => <Link className="text-sm text-[color:var(--border-strong)] transition hover:text-[color:var(--text-on-dark)]" key={item.id} href={item.href}>{item.label}</Link>)}
-            </div>
-          </div>
-        ) : null}
-        {socials.length ? (
-          <div>
-            <p className="text-sm font-semibold text-[color:var(--text-on-dark)]">Sosial</p>
-            <div className="mt-3 grid gap-2">
-              {socials.map((item) => <a className="text-sm text-[color:var(--border-strong)] transition hover:text-[color:var(--text-on-dark)]" key={item.id} href={item.url} target="_blank" rel="noreferrer">{item.label}</a>)}
-            </div>
-          </div>
-        ) : null}
-      </div>
-      <div className="border-t border-[color:var(--border-strong)]/35 px-4 py-5 text-center text-xs text-[color:var(--border-strong)]">
-        © {new Date().getFullYear()} {person?.name ?? "Portofolio HR"}. Dibangun untuk people, growth, dan culture.
+        <p className="font-serif italic text-[color:var(--text-secondary)]">Empowering People, Growing Together.</p>
+        <div className="flex flex-wrap gap-5 lg:justify-end">
+          {(footerNav.length ? footerNav : fallbackFooter).slice(0, 7).map((item) => (
+            <Link className="text-xs font-medium text-[color:var(--text-primary)] hover:text-[color:var(--primary)]" key={item.id} href={item.href}>{item.label}</Link>
+          ))}
+          {socials.slice(0, 1).map((item) => (
+            <a className="text-xs font-medium text-[color:var(--primary)]" key={item.id} href={item.url} target="_blank" rel="noreferrer">{item.label}</a>
+          ))}
+        </div>
       </div>
     </footer>
   );
 }
+
+const fallbackFooter = [
+  { id: "home", label: "Beranda", href: "/" },
+  { id: "about", label: "Tentang Saya", href: "/about" },
+  { id: "experience", label: "Pengalaman", href: "/experience" },
+  { id: "achievement", label: "Pencapaian", href: "/achievement" },
+  { id: "projects", label: "Proyek", href: "/projects" },
+  { id: "blog", label: "Blog", href: "/blog" },
+  { id: "contact", label: "Kontak", href: "/contact" },
+];
 
 function normalizeUserHref(href: string) {
   if (href.startsWith("/dashboard/user/blog/")) return href.replace("/dashboard/user/blog", "/blog");
