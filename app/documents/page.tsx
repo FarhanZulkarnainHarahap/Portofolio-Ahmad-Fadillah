@@ -6,12 +6,11 @@ import { Section } from "@/components/public/Section";
 
 export default async function DocumentsPage() {
   const response = await apiGet<SimpleContent[]>("/public/documents").catch(() => null);
+  const items = response?.data ?? [];
   return (
     <>
-      <PageHeader title="Documents" description="Dokumen portofolio HR dari Cloudinary dan database." />
-      <Section title="Dokumen">
-        <ContentGrid items={response?.data ?? []} empty="Belum ada dokumen portofolio." />
-      </Section>
+      <PageHeader title="Dokumen" description="Dokumen portofolio HR dari Cloudinary dan database." />
+      {items.length ? <Section eyebrow="Documents" title="Dokumen profesional yang bisa ditinjau."><ContentGrid items={items} /></Section> : null}
     </>
   );
 }

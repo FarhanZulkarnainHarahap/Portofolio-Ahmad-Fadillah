@@ -21,8 +21,8 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      aria-label="Toggle theme"
-      className="inline-flex size-10 items-center justify-center rounded-md border border-slate-300 text-slate-700 transition hover:border-blue-500 dark:border-slate-700 dark:text-slate-200"
+      aria-label="Ganti tema"
+      className="inline-flex size-11 items-center justify-center rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] text-[color:var(--text-secondary)] transition hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
     >
       <FiMoon aria-hidden className="dark:hidden" />
       <FiSun aria-hidden className="hidden dark:block" />

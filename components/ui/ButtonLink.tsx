@@ -4,17 +4,19 @@ import type { ReactNode } from "react";
 type ButtonLinkProps = {
   href: string;
   children: ReactNode;
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "ghost";
 };
 
 export function ButtonLink({ href, children, variant = "primary" }: ButtonLinkProps) {
   const classes =
     variant === "primary"
-      ? "bg-blue-700 text-white hover:bg-blue-800"
-      : "border border-slate-300 bg-white text-slate-900 hover:border-blue-500 dark:border-slate-700 dark:bg-slate-950 dark:text-white";
+      ? "bg-[color:var(--primary)] text-white hover:bg-[color:var(--primary-hover)]"
+      : variant === "secondary"
+        ? "border border-[color:var(--border-strong)] bg-[color:var(--surface)] text-[color:var(--text-primary)] hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
+        : "text-[color:var(--primary)] hover:bg-[color:var(--primary-soft)]";
 
   return (
-    <Link className={`inline-flex min-h-11 items-center justify-center rounded-md px-5 text-sm font-semibold transition ${classes}`} href={href}>
+    <Link className={`inline-flex min-h-11 items-center justify-center rounded-full px-5 text-sm font-bold transition ${classes}`} href={href}>
       {children}
     </Link>
   );

@@ -11,7 +11,7 @@ export function DashboardChart({ widget }: { widget: DashboardWidget }) {
         <XAxis dataKey="label" />
         <YAxis />
         <Tooltip />
-        <Bar dataKey="value" fill="#1d4ed8" />
+        <Bar dataKey="value" fill="var(--primary)" radius={[10, 10, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

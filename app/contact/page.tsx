@@ -1,3 +1,5 @@
+import { FiLinkedin, FiMail, FiMapPin, FiPhone } from "react-icons/fi";
+import type { ReactNode } from "react";
 import { apiGet } from "@/lib/api";
 import type { Profile } from "@/types/api";
 import { PageHeader } from "@/components/public/PageHeader";
@@ -10,20 +12,34 @@ export default async function ContactPage() {
 
   return (
     <>
-      <PageHeader title="Contact" description="Kirim pesan melalui form yang divalidasi dan tersimpan ke database." />
-      <Section title="Informasi kontak">
-        <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
-          <div className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-            <dl className="grid gap-4 text-sm">
-              <div><dt className="text-slate-500">Email</dt><dd>{person?.publicEmail ?? "Belum diatur"}</dd></div>
-              <div><dt className="text-slate-500">WhatsApp</dt><dd>{person?.whatsapp ?? "Belum diatur"}</dd></div>
-              <div><dt className="text-slate-500">LinkedIn</dt><dd>{person?.linkedin ?? "Belum diatur"}</dd></div>
-              <div><dt className="text-slate-500">Lokasi</dt><dd>{person?.location ?? "Belum diatur"}</dd></div>
-            </dl>
+      <PageHeader title="Kontak" description="Kirim pesan profesional melalui form yang divalidasi dan tersimpan ke dashboard admin." />
+      <Section eyebrow="Diskusi" title="Mari bicara tentang people, growth, dan culture." tone="strong">
+        <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
+          <div className="premium-card p-7">
+            <p className="font-heading text-2xl font-extrabold">Kanal profesional</p>
+            <div className="mt-6 grid gap-4">
+              {person?.publicEmail ? <ContactItem icon={<FiMail />} label="Email" value={person.publicEmail} href={`mailto:${person.publicEmail}`} /> : null}
+              {person?.whatsapp ? <ContactItem icon={<FiPhone />} label="WhatsApp" value="Mulai percakapan" href={`https://wa.me/${person.whatsapp}`} /> : null}
+              {person?.linkedin ? <ContactItem icon={<FiLinkedin />} label="LinkedIn" value={person.linkedin} href={person.linkedin} /> : null}
+              {person?.location ? <ContactItem icon={<FiMapPin />} label="Lokasi" value={person.location} /> : null}
+            </div>
           </div>
           <ContactForm />
         </div>
       </Section>
     </>
   );
+}
+
+function ContactItem({ icon, label, value, href }: { icon: ReactNode; label: string; value: string; href?: string }) {
+  const content = (
+    <span className="flex items-start gap-3 rounded-[var(--radius-md)] border border-[color:var(--border)] p-4 transition hover:border-[color:var(--primary)]">
+      <span className="mt-1 text-[color:var(--primary)]">{icon}</span>
+      <span>
+        <span className="block text-xs font-bold uppercase tracking-[0.14em] text-[color:var(--text-muted)]">{label}</span>
+        <span className="mt-1 block font-semibold text-[color:var(--text-primary)]">{value}</span>
+      </span>
+    </span>
+  );
+  return href ? <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined}>{content}</a> : content;
 }

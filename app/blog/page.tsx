@@ -6,12 +6,11 @@ import { Section } from "@/components/public/Section";
 
 export default async function BlogPage() {
   const response = await apiList<SimpleContent>("/public/blog?limit=24").catch(() => null);
+  const items = response?.data ?? [];
   return (
     <>
-      <PageHeader title="Blog" description="Artikel HR yang sudah dipublikasikan melalui dashboard admin." />
-      <Section title="Artikel">
-        <ContentGrid items={response?.data ?? []} empty="Belum ada artikel tersedia." hrefFor={(item) => `/blog/${item.slug}`} />
-      </Section>
+      <PageHeader title="Artikel" description="Tulisan Human Resources yang sudah dipublikasikan melalui dashboard admin." />
+      {items.length ? <Section eyebrow="Insights" title="Catatan dan insight profesional HR."><ContentGrid items={items} hrefFor={(item) => `/blog/${item.slug}`} /></Section> : null}
     </>
   );
 }

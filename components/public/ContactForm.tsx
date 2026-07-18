@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import type { ReactNode } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -31,23 +32,23 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4 rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+    <form onSubmit={handleSubmit(onSubmit)} className="premium-card grid gap-4 p-6">
       <input className="hidden" tabIndex={-1} autoComplete="off" {...register("website")} />
-      <Field label="Name" error={errors.name?.message}><input className="form-input" {...register("name")} /></Field>
+      <Field label="Nama" error={errors.name?.message}><input className="form-input" {...register("name")} /></Field>
       <Field label="Email" error={errors.email?.message}><input className="form-input" type="email" {...register("email")} /></Field>
       <div className="grid gap-4 md:grid-cols-2">
-        <Field label="Phone" error={errors.phone?.message}><input className="form-input" {...register("phone")} /></Field>
-        <Field label="Company" error={errors.company?.message}><input className="form-input" {...register("company")} /></Field>
+        <Field label="Telepon" error={errors.phone?.message}><input className="form-input" {...register("phone")} /></Field>
+        <Field label="Perusahaan" error={errors.company?.message}><input className="form-input" {...register("company")} /></Field>
       </div>
-      <Field label="Subject" error={errors.subject?.message}><input className="form-input" {...register("subject")} /></Field>
-      <Field label="Message" error={errors.message?.message}><textarea className="form-input min-h-36" {...register("message")} /></Field>
-      <button disabled={isSubmitting} className="min-h-11 rounded-md bg-blue-700 px-5 text-sm font-semibold text-white disabled:opacity-60" type="submit">
-        {isSubmitting ? "Sending..." : "Send Message"}
+      <Field label="Subjek" error={errors.subject?.message}><input className="form-input" {...register("subject")} /></Field>
+      <Field label="Pesan" error={errors.message?.message}><textarea className="form-input min-h-36" {...register("message")} /></Field>
+      <button disabled={isSubmitting} className="min-h-11 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-white transition hover:bg-[color:var(--primary-hover)] disabled:opacity-60" type="submit">
+        {isSubmitting ? "Mengirim..." : "Kirim Pesan"}
       </button>
     </form>
   );
 }
 
-function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
-  return <label className="grid gap-2 text-sm font-medium text-slate-700 dark:text-slate-200"><span>{label}</span>{children}{error ? <span className="text-xs text-red-600">{error}</span> : null}</label>;
+function Field({ label, error, children }: { label: string; error?: string; children: ReactNode }) {
+  return <label className="grid gap-2 text-sm font-bold text-[color:var(--text-secondary)]"><span>{label}</span>{children}{error ? <span className="text-xs text-[color:var(--danger)]">{error}</span> : null}</label>;
 }

@@ -6,12 +6,11 @@ import { Section } from "@/components/public/Section";
 
 export default async function CertificationsPage() {
   const response = await apiGet<SimpleContent[]>("/public/certifications").catch(() => null);
+  const items = response?.data ?? [];
   return (
     <>
-      <PageHeader title="Certifications" description="Sertifikasi profesional yang sudah dipublikasikan." />
-      <Section title="Sertifikasi">
-        <ContentGrid items={response?.data ?? []} empty="Belum ada sertifikasi tersedia." />
-      </Section>
+      <PageHeader title="Sertifikasi" description="Sertifikasi profesional yang sudah dipublikasikan dari database." />
+      {items.length ? <Section eyebrow="Credentials" title="Sertifikasi dan bukti pembelajaran profesional."><ContentGrid items={items} /></Section> : null}
     </>
   );
 }

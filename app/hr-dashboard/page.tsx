@@ -1,6 +1,5 @@
 import { apiGet } from "@/lib/api";
 import type { DashboardWidget } from "@/types/api";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { PageHeader } from "@/components/public/PageHeader";
 import { Section } from "@/components/public/Section";
 import { DashboardChart } from "@/components/public/DashboardChart";
@@ -11,25 +10,31 @@ export default async function HrDashboardPage() {
 
   return (
     <>
-      <PageHeader title="HR Dashboard Demo" description="Dashboard showcase berbasis dataset yang dikelola admin, tanpa data pribadi nyata." />
-      <Section title="Dashboard widgets">
-        {widgets.length ? (
-          <div className="grid gap-4 lg:grid-cols-2">
+      <PageHeader title="HR Dashboard" description="Showcase data HR berbasis widget yang dikelola admin, tanpa data pribadi nyata." />
+      {widgets.length ? (
+        <Section eyebrow="Data" title="Widget HR untuk membaca performa secara cepat." tone="strong">
+          <div className="grid gap-5 lg:grid-cols-2">
             {widgets.map((widget) => (
-              <article key={widget.id} className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-                <p className="font-semibold">{widget.title}</p>
+              <article key={widget.id} className="premium-card p-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="font-heading text-2xl font-extrabold">{widget.title}</p>
+                    {widget.period ? <p className="mt-1 text-sm font-semibold text-[color:var(--text-muted)]">{widget.period}</p> : null}
+                  </div>
+                  <span className="rounded-full bg-[color:var(--primary-soft)] px-3 py-1 text-xs font-bold text-[color:var(--primary)]">{widget.widgetType}</span>
+                </div>
                 {widget.widgetType === "KPI" ? (
-                  <p className="mt-4 text-4xl font-bold text-blue-700 dark:text-cyan-300">{widget.value}{widget.unit}</p>
+                  <p className="mt-7 font-heading text-5xl font-extrabold text-[color:var(--primary)]">{widget.value}{widget.unit}</p>
                 ) : (
-                  <div className="mt-5 h-64">
+                  <div className="mt-7 h-64">
                     <DashboardChart widget={widget} />
                   </div>
                 )}
               </article>
             ))}
           </div>
-        ) : <EmptyState title="Dashboard belum memiliki dataset." />}
-      </Section>
+        </Section>
+      ) : null}
     </>
   );
 }

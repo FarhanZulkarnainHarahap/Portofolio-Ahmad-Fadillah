@@ -13,5 +13,5 @@ export function DeleteProjectButton({ id }: { id: string }) {
     router.refresh();
   }
 
-  return <button onClick={onDelete} className="rounded-md border border-red-300 px-3 py-1.5 text-red-700" type="button">Delete</button>;
+  return <button onClick={onDelete} className="inline-flex min-h-9 items-center rounded-full border border-red-300 px-3 text-xs font-bold text-red-700 hover:bg-red-50" type="button">Delete</button>;
 }

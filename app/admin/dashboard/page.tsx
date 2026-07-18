@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FiArrowUpRight, FiBriefcase, FiFileText, FiMail, FiStar } from "react-icons/fi";
 import { apiGet } from "@/lib/api";
 import { requireAdmin } from "@/lib/require-admin";
 import type { AdminDashboard } from "@/types/api";
@@ -8,32 +9,51 @@ export default async function AdminDashboardPage() {
   const response = await apiGet<AdminDashboard>("/admin/dashboard", { auth: true });
   const data = response.data;
   const cards = [
-    ["Projects", data.projects],
-    ["Experiences", data.experiences],
-    ["Blog posts", data.blogPosts],
-    ["Documents", data.documents],
-    ["Certifications", data.certifications],
-    ["New messages", data.newMessages],
-    ["Draft posts", data.draftPosts],
-    ["Published projects", data.publishedProjects],
-  ];
+    ["Total Projects", data.projects, FiBriefcase, "/admin/projects"],
+    ["Published Projects", data.publishedProjects, FiArrowUpRight, "/admin/projects"],
+    ["Experiences", data.experiences, FiStar, "/admin/experiences"],
+    ["Certifications", data.certifications, FiFileText, "/admin/certifications"],
+    ["New Messages", data.newMessages, FiMail, "/admin/messages"],
+    ["Draft Articles", data.draftPosts, FiFileText, "/admin/blog-posts"],
+  ] as const;
+  const totalSignals = data.projects + data.experiences + data.certifications + data.documents + data.blogPosts;
 
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold">Dashboard</h1>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">Ringkasan konten aktual dari API.</p>
+          <p className="editorial-label">Overview</p>
+          <h1 className="mt-3 font-heading text-4xl font-extrabold">Dashboard Admin</h1>
+          <p className="mt-2 text-sm text-[color:var(--text-secondary)]">Ringkasan konten aktual dari API dan PostgreSQL.</p>
         </div>
-        <Link className="rounded-md bg-blue-700 px-4 py-2 text-sm font-semibold text-white" href="/admin/projects/create">Create project</Link>
+        <Link className="inline-flex min-h-11 items-center rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-white" href="/admin/projects/create">Create project</Link>
       </div>
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {cards.map(([label, value]) => (
-          <div key={label} className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-            <p className="text-sm text-slate-500">{label}</p>
-            <p className="mt-2 text-3xl font-bold">{value}</p>
-          </div>
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {cards.map(([label, value, Icon, href]) => (
+          <Link key={label} href={href} className="premium-card p-5 transition hover:-translate-y-1 hover:border-[color:var(--primary)]">
+            <div className="flex items-center justify-between gap-4">
+              <p className="text-sm font-bold text-[color:var(--text-muted)]">{label}</p>
+              <Icon className="text-[color:var(--primary)]" />
+            </div>
+            <p className="mt-5 font-heading text-4xl font-extrabold">{value}</p>
+          </Link>
         ))}
+      </div>
+      <div className="mt-6 grid gap-5 lg:grid-cols-[1fr_0.75fr]">
+        <section className="premium-card p-6">
+          <p className="font-heading text-2xl font-extrabold">Content completion</p>
+          <p className="mt-2 text-sm text-[color:var(--text-secondary)]">Sinyal konten aktif yang sudah masuk ke CMS.</p>
+          <div className="mt-6 h-3 rounded-full bg-[color:var(--surface-secondary)]">
+            <div className="h-full rounded-full bg-[color:var(--secondary)]" style={{ width: `${Math.min(100, totalSignals * 8)}%` }} />
+          </div>
+        </section>
+        <section className="premium-card p-6">
+          <p className="font-heading text-2xl font-extrabold">Quick actions</p>
+          <div className="mt-5 grid gap-2">
+            <Link className="rounded-[var(--radius-md)] border border-[color:var(--border)] px-4 py-3 text-sm font-bold hover:border-[color:var(--primary)]" href="/admin/projects/create">Tambah project</Link>
+            <Link className="rounded-[var(--radius-md)] border border-[color:var(--border)] px-4 py-3 text-sm font-bold hover:border-[color:var(--primary)]" href="/admin/messages">Lihat pesan baru</Link>
+          </div>
+        </section>
       </div>
     </div>
   );

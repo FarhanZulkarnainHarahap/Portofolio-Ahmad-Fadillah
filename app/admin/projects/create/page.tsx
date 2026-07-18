@@ -5,7 +5,8 @@ export default async function CreateProjectPage() {
   await requireAdmin();
   return (
     <div>
-      <h1 className="text-3xl font-bold">Create project</h1>
+      <p className="editorial-label">Projects</p>
+      <h1 className="mt-3 font-heading text-4xl font-extrabold">Create project</h1>
       <ProjectForm mode="create" />
     </div>
   );

@@ -6,12 +6,11 @@ import { Section } from "@/components/public/Section";
 
 export default async function AchievementsPage() {
   const response = await apiGet<SimpleContent[]>("/public/achievements").catch(() => null);
+  const items = response?.data ?? [];
   return (
     <>
-      <PageHeader title="Achievements" description="Pencapaian HR yang sudah dipublikasikan." />
-      <Section title="Pencapaian">
-        <ContentGrid items={response?.data ?? []} empty="Belum ada pencapaian yang dipublikasikan." />
-      </Section>
+      <PageHeader title="Pencapaian" description="Evidence profesional yang sudah dipublikasikan melalui dashboard admin." />
+      {items.length ? <Section eyebrow="Evidence" title="Capaian yang memperkuat kredibilitas."><ContentGrid items={items} /></Section> : null}
     </>
   );
 }

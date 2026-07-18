@@ -9,7 +9,8 @@ export default async function EditProjectPage({ params }: { params: Promise<{ id
   const response = await apiGet<Project>(`/admin/projects/${id}`, { auth: true });
   return (
     <div>
-      <h1 className="text-3xl font-bold">Edit project</h1>
+      <p className="editorial-label">Projects</p>
+      <h1 className="mt-3 font-heading text-4xl font-extrabold">Edit project</h1>
       <ProjectForm mode="edit" project={response.data} />
     </div>
   );
