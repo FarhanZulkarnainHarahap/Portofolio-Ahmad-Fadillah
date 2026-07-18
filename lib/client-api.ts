@@ -1,7 +1,7 @@
-import { apiBaseUrl } from "./api-config";
+import { getApiBaseUrl } from "./api-config";
 
 export async function clientRequest<T>(path: string, init: RequestInit = {}) {
-  const response = await fetch(`${apiBaseUrl}${path}`, {
+  const response = await fetch(`${getApiBaseUrl()}${path}`, {
     credentials: "include",
     headers: {
       "content-type": "application/json",

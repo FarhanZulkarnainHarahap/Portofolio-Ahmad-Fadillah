@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import type { ApiListResponse, ApiResponse } from "@/types/api";
-import { apiBaseUrl } from "./api-config";
+import { getApiBaseUrl } from "./api-config";
 
 type RequestOptions = RequestInit & {
   auth?: boolean;
@@ -8,7 +8,7 @@ type RequestOptions = RequestInit & {
 
 export async function apiGet<T>(path: string, options: RequestOptions = {}) {
   const headers = await getHeaders(options.auth);
-  const response = await fetch(`${apiBaseUrl}${path}`, {
+  const response = await fetch(`${getApiBaseUrl()}${path}`, {
     cache: "no-store",
     credentials: "include",
     headers,
@@ -19,7 +19,7 @@ export async function apiGet<T>(path: string, options: RequestOptions = {}) {
 
 export async function apiList<T>(path: string, options: RequestOptions = {}) {
   const headers = await getHeaders(options.auth);
-  const response = await fetch(`${apiBaseUrl}${path}`, {
+  const response = await fetch(`${getApiBaseUrl()}${path}`, {
     cache: "no-store",
     credentials: "include",
     headers,
@@ -30,7 +30,7 @@ export async function apiList<T>(path: string, options: RequestOptions = {}) {
 
 export async function apiSend<T>(path: string, init: RequestOptions) {
   const authHeaders = await getHeaders(init.auth);
-  const response = await fetch(`${apiBaseUrl}${path}`, {
+  const response = await fetch(`${getApiBaseUrl()}${path}`, {
     credentials: "include",
     headers: {
       "content-type": "application/json",
