@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HR Portfolio Web
 
-## Getting Started
+Next.js App Router frontend for the HR Portfolio full-stack project.
 
-First, run the development server:
+## Stack
+
+- Next.js, React, TypeScript, Tailwind CSS
+- React Hook Form + Zod
+- GSAP reveal animation with reduced-motion support
+- React Icons, Recharts, Sonner toasts
+- API-driven public pages and protected admin screens
+
+## Setup
 
 ```bash
+cd web
+npm install
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Set `NEXT_PUBLIC_API_URL` to the deployed Express API, for example `https://your-api-domain.example/api/v1`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - development server
+- `npm run build` - production build
+- `npm run start` - run built app
+- `npm run lint` - ESLint
+- `npm run type-check` - TypeScript check
+- `npm run test` - Vitest helper tests
 
-## Learn More
+## Content Rules
 
-To learn more about Next.js, take a look at the following resources:
+The public website does not contain seeded portfolio content or local JSON data. Pages call the Express API and show professional empty states when PostgreSQL has no published records.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Admin
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Login: `/admin/login`
+- Dashboard: `/admin/dashboard`
+- Project CRUD: `/admin/projects`
+- Other modules expose API-backed resource views and share the `/api/v1/admin/:resource` REST surface.
 
-## Deploy on Vercel
+Admin tokens are stored by the API in HTTP-only cookies. The frontend does not store sensitive tokens in `localStorage`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Deploy to Vercel or any Next.js host. Configure `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_SITE_URL` for the production environment.
