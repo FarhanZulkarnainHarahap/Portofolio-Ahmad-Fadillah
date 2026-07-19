@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FiArrowRight, FiCalendar, FiClock, FiStar } from "react-icons/fi";
+import { FiArrowRight, FiBookOpen, FiCalendar, FiClock, FiStar } from "react-icons/fi";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { PageHeader } from "@/components/user/PageHeader";
 import { Section } from "@/components/user/Section";
@@ -30,8 +30,8 @@ export default async function BlogPage() {
                 <p className="mt-5 max-w-2xl leading-7 text-[color:var(--text-secondary)]">{featured.excerpt ?? featured.description}</p>
                 <span className="mt-7 inline-flex items-center gap-3 font-semibold text-[color:var(--primary)]">Baca selengkapnya <FiArrowRight /></span>
               </div>
-              <div className="relative min-h-[300px] bg-[color:var(--surface-soft)]">
-                <Image src="/me-about.jpeg" alt="" fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover object-[center_16%] grayscale transition group-hover:scale-[1.03]" />
+              <div className="relative grid min-h-[300px] place-items-center bg-[color:var(--surface-soft)] text-5xl text-[color:var(--primary)]">
+                {getSimpleImageUrl(featured) ? <Image src={getSimpleImageUrl(featured)!} alt={featured.title ?? "Artikel"} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover object-center transition group-hover:scale-[1.03]" /> : <FiBookOpen aria-hidden />}
               </div>
             </Link>
             <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -47,10 +47,12 @@ export default async function BlogPage() {
 }
 
 function BlogCard({ post }: { post: SimpleContent }) {
+  const imageUrl = getSimpleImageUrl(post);
+
   return (
     <Link href={`/blog/${post.slug}`} className="group overflow-hidden rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] transition hover:-translate-y-1 hover:border-[color:var(--primary)]">
-      <div className="relative aspect-[16/9] bg-[color:var(--surface-soft)]">
-        <Image src="/me-about.jpeg" alt="" fill sizes="25vw" className="object-cover object-[center_20%] grayscale transition group-hover:scale-[1.04]" />
+      <div className="relative grid aspect-[16/9] place-items-center bg-[color:var(--surface-soft)] text-4xl text-[color:var(--primary)]">
+        {imageUrl ? <Image src={imageUrl} alt={post.title ?? "Artikel"} fill sizes="25vw" className="object-cover object-center transition group-hover:scale-[1.04]" /> : <FiBookOpen aria-hidden />}
       </div>
       <div className="p-5">
         {categoryLabel(post.category) ? <span className="rounded-full bg-[color:var(--primary-soft)] px-3 py-1 text-xs font-semibold text-[color:var(--primary)]">{categoryLabel(post.category)}</span> : null}
@@ -65,4 +67,8 @@ function BlogCard({ post }: { post: SimpleContent }) {
 function categoryLabel(category: SimpleContent["category"]) {
   if (!category) return null;
   return typeof category === "string" ? category : category.name;
+}
+
+function getSimpleImageUrl(item: SimpleContent) {
+  return item.coverImage?.secureUrl ?? item.image?.secureUrl ?? item.thumbnail?.secureUrl ?? null;
 }

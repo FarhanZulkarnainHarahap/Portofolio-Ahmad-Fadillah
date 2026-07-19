@@ -30,6 +30,10 @@ export type Profile = {
   whatsapp?: string | null;
   linkedin?: string | null;
   availabilityStatus?: string | null;
+  profileImageUrl?: string | null;
+  heroImageUrl?: string | null;
+  profileImage?: { secureUrl?: string | null } | null;
+  heroImage?: { secureUrl?: string | null } | null;
   cvMediaId?: string | null;
 };
 
@@ -86,6 +90,8 @@ export type Project = {
   metrics?: { id: string; label: string; value: string; unit?: string | null }[];
   results?: { id: string; content: string }[];
   challenges?: { id: string; content: string }[];
+  thumbnail?: { secureUrl?: string | null } | null;
+  images?: { id?: string; altText?: string | null; secureUrl?: string | null; media?: { secureUrl?: string | null } | null }[];
 };
 
 export type SimpleContent = {
@@ -102,6 +108,9 @@ export type SimpleContent = {
   content?: string | null;
   excerpt?: string | null;
   slug?: string;
+  coverImage?: { secureUrl?: string | null } | null;
+  image?: { secureUrl?: string | null } | null;
+  thumbnail?: { secureUrl?: string | null } | null;
 };
 
 export type DashboardWidget = {

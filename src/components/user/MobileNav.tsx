@@ -41,7 +41,7 @@ export function MobileNav({ items, brandName, tagline }: { items: NavItem[]; bra
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       panel.style.opacity = open ? "1" : "0";
-      panel.style.transform = open ? "translateX(0)" : "translateX(1rem)";
+      panel.style.transform = open ? "translateY(0)" : "translateY(-0.75rem)";
       panel.style.pointerEvents = open ? "auto" : "none";
       overlay.style.opacity = open ? "1" : "0";
       overlay.style.pointerEvents = open ? "auto" : "none";
@@ -56,8 +56,8 @@ export function MobileNav({ items, brandName, tagline }: { items: NavItem[]; bra
     });
     gsap.to(panel, {
       autoAlpha: open ? 1 : 0,
-      x: open ? 0 : 24,
-      duration: 0.24,
+      y: open ? 0 : -12,
+      duration: 0.22,
       ease: "power3.out",
       pointerEvents: open ? "auto" : "none",
     });
@@ -71,7 +71,7 @@ export function MobileNav({ items, brandName, tagline }: { items: NavItem[]; bra
         aria-expanded={open}
         aria-controls="mobile-menu"
         onClick={() => setOpen((value) => !value)}
-        className="inline-flex size-11 items-center justify-center rounded-[10px] border border-[color:var(--border)] bg-[color:var(--surface)] text-xl text-[color:var(--text-primary)] shadow-[var(--shadow-sm)] transition hover:border-[color:var(--primary)] hover:text-[color:var(--primary)]"
+        className="relative z-[90] inline-flex size-11 items-center justify-center rounded-[10px] border border-[color:var(--border)] bg-[#FFFFFF] text-xl text-[color:var(--text-primary)] shadow-[var(--shadow-sm)] transition hover:border-[color:var(--primary)] hover:text-[color:var(--primary)] dark:bg-[#2D2A26]"
       >
         {open ? <FiX aria-hidden /> : <FiMenu aria-hidden />}
       </button>
@@ -80,15 +80,15 @@ export function MobileNav({ items, brandName, tagline }: { items: NavItem[]; bra
         type="button"
         aria-label="Tutup menu navigasi"
         onClick={() => setOpen(false)}
-        className="invisible fixed inset-0 z-40 bg-[color:var(--secondary)]/42 opacity-0 backdrop-blur-[2px]"
+        className="invisible fixed inset-0 z-[60] bg-[rgba(45,42,38,0.5)] opacity-0 backdrop-blur-[2px]"
       />
       <aside
         id="mobile-menu"
         ref={panelRef}
-        className="invisible fixed bottom-3 right-3 top-3 z-50 flex w-[min(22rem,calc(100vw-1.5rem))] translate-x-6 flex-col rounded-[14px] border border-[color:var(--border)] bg-[color:var(--surface)] p-5 opacity-0 shadow-[var(--shadow-lg)]"
+        className="invisible fixed inset-x-4 top-[5.25rem] z-[80] max-h-[calc(100dvh-6.25rem)] translate-y-[-0.75rem] overflow-hidden rounded-[16px] border border-[color:var(--border)] bg-[#FFFFFF] opacity-0 shadow-[0_24px_70px_rgba(45,42,38,0.24)] dark:bg-[#2D2A26] sm:inset-x-6 md:left-auto md:w-[24rem]"
         aria-label="Menu navigasi"
       >
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start justify-between gap-4 border-b border-[color:var(--border)] bg-[#FFFFFF] p-5 dark:bg-[#2D2A26]">
           <BrandLogo brandName={brandName} tagline={tagline} variant="horizontal" size="sm" showTagline />
           <button
             type="button"
@@ -99,7 +99,7 @@ export function MobileNav({ items, brandName, tagline }: { items: NavItem[]; bra
             <FiX aria-hidden />
           </button>
         </div>
-        <nav className="mt-6 grid gap-1" aria-label="Navigasi mobile">
+        <nav className="grid max-h-[calc(100dvh-15rem)] gap-1 overflow-y-auto bg-[#FFFFFF] p-3 dark:bg-[#2D2A26]" aria-label="Navigasi mobile">
           {items.map((item) => {
             const active = item.href === "/" ? pathname === "/" : pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
@@ -119,7 +119,7 @@ export function MobileNav({ items, brandName, tagline }: { items: NavItem[]; bra
             );
           })}
         </nav>
-        <div className="mt-auto border-t border-[color:var(--border)] pt-5">
+        <div className="border-t border-[color:var(--border)] bg-[#FFFFFF] p-4 dark:bg-[#2D2A26]">
           <Link
             href="/certificate"
             onClick={() => setOpen(false)}

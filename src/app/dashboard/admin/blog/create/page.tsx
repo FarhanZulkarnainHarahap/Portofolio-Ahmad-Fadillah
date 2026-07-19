@@ -1,7 +1,13 @@
 import { requireAdmin } from "@/lib/require-admin";
-import { AdminUnavailableAction } from "@/components/admin/AdminUnavailableAction";
+import { AdminContentForm } from "@/components/admin/AdminContentForm";
 
 export default async function CreateBlogPage() {
   await requireAdmin();
-  return <AdminUnavailableAction title="Tulis artikel" backHref="/dashboard/admin/blog" />;
+  return (
+    <div>
+      <p className="editorial-label">Blog</p>
+      <h1 className="mt-3 font-heading text-4xl font-extrabold">Tulis artikel</h1>
+      <AdminContentForm backHref="/dashboard/admin/blog" mode="create" resource="blog-posts" />
+    </div>
+  );
 }

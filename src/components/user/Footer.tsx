@@ -17,7 +17,7 @@ export async function Footer() {
       <div className="mx-auto grid max-w-[1360px] items-center gap-4 px-6 py-6 text-sm text-[color:var(--text-secondary)] sm:px-8 lg:grid-cols-[1fr_auto_1fr]">
         <div>
           <BrandLogo brandName="Portofolio HR" tagline="Human Resources Portfolio" variant="horizontal" size="sm" />
-          <p className="mt-1 text-xs">© {new Date().getFullYear()} {person?.name ?? "Ahamad Fadillah Harahap"}. All rights reserved.</p>
+          <p className="mt-1 text-xs">© {new Date().getFullYear()} {person?.name ?? "Portofolio HR"}. All rights reserved.</p>
         </div>
         <p className="font-serif text-base italic text-[color:var(--text-secondary)] lg:text-center">Empowering People, Growing Together.</p>
         <div className="grid grid-cols-2 gap-x-5 gap-y-3 sm:flex sm:flex-wrap lg:justify-end">

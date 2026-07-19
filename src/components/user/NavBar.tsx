@@ -27,7 +27,7 @@ export async function NavBar() {
   const person = profile?.data;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[color:var(--border)] bg-[color:var(--surface)]/92 px-4 backdrop-blur-xl">
+    <header className="sticky top-0 z-[70] border-b border-[color:var(--border)] bg-[#FFFFFF] px-4 shadow-[0_1px_0_rgba(45,42,38,0.04)] dark:bg-[#2D2A26]">
       <nav className="mx-auto flex h-16 max-w-[1360px] items-center justify-between gap-3 md:h-[72px]" aria-label="Navigasi utama">
         <BrandLogo href="/" brandName={person?.name} tagline="Human Resources Portfolio" variant="horizontal" size="md" />
         <ActiveNavLinks items={navItems} />

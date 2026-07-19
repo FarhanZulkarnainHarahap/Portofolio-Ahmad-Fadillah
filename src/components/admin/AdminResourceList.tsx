@@ -1,17 +1,19 @@
-import { FiArrowUpRight, FiDatabase, FiPlus } from "react-icons/fi";
+import { FiDatabase, FiEdit3, FiPlus } from "react-icons/fi";
 import Link from "next/link";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { itemTitle } from "@/lib/format";
 import { getAdminResource, type AdminResourceRow } from "@/services/admin-resource.service";
+import { DeleteResourceButton } from "./DeleteResourceButton";
 
 type AdminResourceListProps = {
   title: string;
   description: string;
   resource: string;
   createHref?: string;
+  editHrefBase?: string;
 };
 
-export async function AdminResourceList({ title, description, resource, createHref }: AdminResourceListProps) {
+export async function AdminResourceList({ title, description, resource, createHref, editHrefBase }: AdminResourceListProps) {
   const response = await getAdminResource(resource).catch(() => null);
   const rows = response?.data ?? [];
 
@@ -28,7 +30,7 @@ export async function AdminResourceList({ title, description, resource, createHr
       <div className="mt-6">
         {rows.length ? (
           <div className="grid gap-3">
-            {rows.map((row) => <AdminResourceCard key={String(row.id)} row={row} />)}
+            {rows.map((row) => <AdminResourceCard key={String(row.id)} editHrefBase={editHrefBase} resource={resource} row={row} />)}
           </div>
         ) : <EmptyState title="Belum ada data pada modul ini." description="Tambahkan konten baru melalui tombol aksi yang tersedia." />}
       </div>
@@ -36,7 +38,7 @@ export async function AdminResourceList({ title, description, resource, createHr
   );
 }
 
-function AdminResourceCard({ row }: { row: AdminResourceRow }) {
+function AdminResourceCard({ row, resource, editHrefBase }: { row: AdminResourceRow; resource: string; editHrefBase?: string }) {
   return (
     <article className="premium-card flex items-start justify-between gap-5 p-5">
       <div className="flex gap-4">
@@ -48,7 +50,15 @@ function AdminResourceCard({ row }: { row: AdminResourceRow }) {
           <p className="mt-2 text-xs text-[color:var(--text-muted)]">ID: {row.id}</p>
         </div>
       </div>
-      <FiArrowUpRight className="text-[color:var(--text-muted)]" />
+      <div className="flex shrink-0 flex-wrap justify-end gap-2">
+        {editHrefBase ? (
+          <Link className="inline-flex min-h-9 items-center gap-2 rounded-full border border-[color:var(--border)] px-3 text-xs font-bold hover:border-[color:var(--primary)]" href={`${editHrefBase}/${row.id}/edit`}>
+            <FiEdit3 />
+            Edit
+          </Link>
+        ) : null}
+        <DeleteResourceButton id={row.id} resource={resource} />
+      </div>
     </article>
   );
 }

@@ -7,78 +7,64 @@ import {
   FiBarChart2,
   FiBookOpen,
   FiBriefcase,
-  FiInstagram,
   FiMail,
   FiPhone,
   FiUsers,
 } from "react-icons/fi";
-import type { Expertise, Profile, Project, Statistic } from "@/types/api";
+import type { Profile, Project, Statistic } from "@/types/api";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { getPublicAchievements } from "@/services/achievement.service";
 import { getPublicCertificates } from "@/services/certificate.service";
 import { getPublicProfile } from "@/services/profile.server-service";
 import { getFeaturedProjects } from "@/services/project.server-service";
+import { getPublicSettings } from "@/services/settings.service";
 import { getPublicTools } from "@/services/tools.server-service";
 import { apiGet } from "@/lib/server-api-client";
 
-const fallbackProfile = {
-  name: "Ahamad Fadillah Harahap",
-  headline: "Lulusan S1 Agribisnis UMSU",
-  shortDescription:
-    "Saya adalah profesional Human Resources yang berfokus pada pengelolaan talenta, pengembangan budaya kerja, dan mendorong pertumbuhan karyawan serta organisasi secara berkelanjutan.",
-  availabilityStatus: "Human Resources • People Growth",
-  publicEmail: "afadillah117@gmail.com",
-  whatsapp: "6287768885573",
-} satisfies Partial<Profile>;
-
-const fallbackStats: Statistic[] = [
-  { id: "years", label: "Tahun Pengalaman di bidang Human Resources", value: 3, unit: "+", icon: "users" },
-  { id: "company", label: "Perusahaan / Instansi Telah berkolaborasi", value: 6, unit: "+", icon: "building" },
-  { id: "education", label: "Pendidikan Agribisnis - UMSU", value: 1, unit: "S1", icon: "education" },
-  { id: "impact", label: "Karyawan Terdampak Melalui program HR", value: 100, unit: "+", icon: "award" },
-];
-
-const fallbackTools: Expertise[] = [
-  { id: "talent", name: "Talent Acquisition & Onboarding", category: { name: "HR" } },
-  { id: "performance", name: "Performance Management", category: { name: "HR" } },
-  { id: "relations", name: "Employee Relations", category: { name: "HR" } },
-  { id: "learning", name: "Learning & Development", category: { name: "HR" } },
-  { id: "excel", name: "Microsoft Excel", category: { name: "Tools" } },
-  { id: "hris", name: "HRIS", category: { name: "Tools" } },
-  { id: "canva", name: "Canva", category: { name: "Tools" } },
-  { id: "notion", name: "Notion", category: { name: "Tools" } },
-];
-
 export async function HomePage() {
-  const [profile, stats, expertise, projects, achievements, certifications] = await Promise.all([
+  const [profile, stats, expertise, projects, achievements, certifications, settings] = await Promise.all([
     getPublicProfile().catch(() => null),
     apiGet<Statistic[]>("/public/statistics").catch(() => null),
     getPublicTools().catch(() => null),
     getFeaturedProjects(4).catch(() => null),
     getPublicAchievements().catch(() => null),
     getPublicCertificates().catch(() => null),
+    getPublicSettings().catch(() => null),
   ]);
 
-  const person = { ...fallbackProfile, ...(profile?.data ?? {}) } as Profile;
-  const statisticItems = stats?.data?.length ? stats.data : fallbackStats;
-  const expertiseItems = expertise?.data?.length ? expertise.data : fallbackTools;
+  const person = profile?.data ?? null;
+  const statisticItems = stats?.data ?? [];
+  const expertiseItems = expertise?.data ?? [];
   const projectItems = projects?.data ?? [];
   const achievementItems = achievements?.data ?? [];
   const certificateCount = certifications?.data?.length ?? 0;
+  const heroImage = person ? getProfileImageUrl(person, "hero") ?? getProfileImageUrl(person, "profile") : null;
+  const contactItems = person ? getContactItems(person, settings?.data.socials ?? []) : [];
+
+  if (!person) {
+    return (
+      <section className="section-shell py-12">
+        <EmptyState title="Profil belum dipublikasikan." description="Konten beranda akan tersedia setelah profil utama dipublikasikan." />
+      </section>
+    );
+  }
 
   return (
     <div>
       <section className="relative overflow-hidden border-b border-[color:var(--border)]">
-        <div className="section-shell grid gap-8 py-8 lg:min-h-[660px] lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-10 lg:py-0">
+        <div className={`section-shell grid gap-8 py-8 lg:min-h-[660px] lg:items-center lg:gap-10 lg:py-0 ${heroImage ? "lg:grid-cols-[0.92fr_1.08fr]" : ""}`}>
           <div className="relative z-10 py-4 lg:py-20">
-            <p className="inline-flex rounded-full bg-[color:var(--surface-soft)] px-4 py-2 text-sm font-semibold text-[color:var(--primary)]">
-              {person.availabilityStatus}
-            </p>
+            {person.availabilityStatus ? (
+              <p className="inline-flex rounded-full bg-[color:var(--surface-soft)] px-4 py-2 text-sm font-semibold text-[color:var(--primary)]">
+                {person.availabilityStatus}
+              </p>
+            ) : null}
             <h1 className="mt-5 max-w-3xl overflow-wrap-anywhere font-serif text-[clamp(3.35rem,14vw,5.25rem)] font-semibold leading-[0.95] tracking-normal text-[color:var(--text-primary)] lg:text-[clamp(4.75rem,6vw,6.75rem)]">
               {person.name}
             </h1>
-            <p className="mt-4 font-serif text-2xl text-[color:var(--primary)]">{person.headline}</p>
-            <div className="mt-5 h-px w-24 bg-[color:var(--primary)]" />
-            <p className="mt-6 max-w-xl text-base leading-8 text-[color:var(--text-primary)]">{person.shortDescription}</p>
+            {person.headline ? <p className="mt-4 font-serif text-2xl text-[color:var(--primary)]">{person.headline}</p> : null}
+            {person.headline || person.shortDescription ? <div className="mt-5 h-px w-24 bg-[color:var(--primary)]" /> : null}
+            {person.shortDescription ? <p className="mt-6 max-w-xl text-base leading-8 text-[color:var(--text-primary)]">{person.shortDescription}</p> : null}
             <div className="mt-8 flex flex-wrap items-center gap-5">
               <HeroButton href="/about" icon={<FiUsers />}>Tentang Saya</HeroButton>
               <HeroButton href="/experience" variant="outline" icon={<FiBriefcase />}>Lihat Pengalaman</HeroButton>
@@ -87,53 +73,56 @@ export async function HomePage() {
               </Link>
             </div>
           </div>
-          <div className="relative mx-auto h-full min-h-[420px] w-full max-w-sm overflow-hidden rounded-[12px] border border-[color:var(--border)] bg-[color:var(--surface-soft)] sm:min-h-[520px] lg:max-w-none lg:overflow-visible lg:rounded-none lg:border-0">
-            <div className="absolute inset-y-0 left-0 hidden w-[120%] rounded-l-[48%] bg-[color:var(--surface-soft)] lg:block" />
-            <Image
-              src="/me-about.jpeg"
-              alt="Potret Ahamad Fadillah Harahap"
-              fill
-              priority
-              sizes="(min-width: 1024px) 52vw, 90vw"
-              className="object-cover object-[center_18%]"
-            />
-            <div className="absolute bottom-6 right-6 grid size-24 place-items-center rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] text-center text-[9px] font-bold uppercase tracking-[0.18em] text-[color:var(--primary)] shadow-[var(--shadow-md)] lg:bottom-24 lg:right-20 lg:size-28 lg:text-[10px]">
-              People<br />Process<br />Growth
+          {heroImage ? (
+            <div className="relative mx-auto h-full min-h-[420px] w-full max-w-sm overflow-hidden rounded-[12px] border border-[color:var(--border)] bg-[color:var(--surface-soft)] sm:min-h-[520px] lg:max-w-none lg:overflow-visible lg:rounded-none lg:border-0">
+              <div className="absolute inset-y-0 left-0 hidden w-[120%] rounded-l-[48%] bg-[color:var(--surface-soft)] lg:block" />
+              <Image
+                src={heroImage}
+                alt={`Potret ${person.name}`}
+                fill
+                priority
+                sizes="(min-width: 1024px) 52vw, 90vw"
+                className="object-cover object-[center_18%]"
+              />
+              <DotGrid className="absolute bottom-20 right-3 lg:bottom-24 lg:right-0" />
             </div>
-            <DotGrid className="absolute bottom-20 right-3 lg:bottom-24 lg:right-0" />
-          </div>
+          ) : null}
         </div>
       </section>
 
-      <section className="section-shell relative z-20 mt-6 lg:-mt-12">
-        <div className="grid grid-cols-2 rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] shadow-[var(--shadow-md)] lg:grid-cols-4">
-          {statisticItems.slice(0, 4).map((stat, index) => (
-            <StatBox key={stat.id} stat={stat} icon={index} />
-          ))}
-        </div>
-      </section>
+      {statisticItems.length ? (
+        <section className="section-shell relative z-20 mt-6 lg:-mt-12">
+          <div className="grid grid-cols-2 rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] shadow-[var(--shadow-md)] lg:grid-cols-4">
+            {statisticItems.slice(0, 4).map((stat, index) => (
+              <StatBox key={stat.id} stat={stat} icon={index} />
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section className="section-shell grid gap-5 py-5 lg:grid-cols-3">
-        <article className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
-          <SectionTitle icon={<FiBookOpen />} title="Spesialisasi & Tools" />
-          <div className="mt-5 grid gap-5 sm:grid-cols-2">
-            <div className="grid gap-3">
-              {expertiseItems.filter((item) => item.category?.name !== "Tools").slice(0, 4).map((item) => (
-                <p key={item.id} className="flex items-center gap-3 text-sm text-[color:var(--text-secondary)]">
-                  <span className="size-1.5 rounded-full bg-[color:var(--primary)]" /> {item.name}
-                </p>
-              ))}
+        {expertiseItems.length ? (
+          <article className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
+            <SectionTitle icon={<FiBookOpen />} title="Spesialisasi & Tools" />
+            <div className="mt-5 grid gap-5 sm:grid-cols-2">
+              {expertiseItems.some((item) => item.category?.name !== "Tools") ? <div className="grid gap-3">
+                {expertiseItems.filter((item) => item.category?.name !== "Tools").slice(0, 4).map((item) => (
+                  <p key={item.id} className="flex items-center gap-3 text-sm text-[color:var(--text-secondary)]">
+                    <span className="size-1.5 rounded-full bg-[color:var(--primary)]" /> {item.name}
+                  </p>
+                ))}
+              </div> : null}
+              {expertiseItems.some((item) => item.category?.name === "Tools") ? <div className="grid gap-2">
+                {expertiseItems.filter((item) => item.category?.name === "Tools").slice(0, 4).map((item) => (
+                  <span key={item.id} className="rounded-[6px] bg-[color:var(--surface-soft)] px-3 py-2 text-sm text-[color:var(--text-secondary)]">
+                    {item.name}
+                  </span>
+                ))}
+              </div> : null}
             </div>
-            <div className="grid gap-2">
-              {expertiseItems.filter((item) => item.category?.name === "Tools").slice(0, 4).map((item) => (
-                <span key={item.id} className="rounded-[6px] bg-[color:var(--surface-soft)] px-3 py-2 text-sm text-[color:var(--text-secondary)]">
-                  {item.name}
-                </span>
-              ))}
-            </div>
-          </div>
-          <TextLink href="/about">Lihat semua keahlian</TextLink>
-        </article>
+            <TextLink href="/about">Lihat semua keahlian</TextLink>
+          </article>
+        ) : null}
 
         {projectItems[0] ? (
           <article className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
@@ -175,13 +164,15 @@ export async function HomePage() {
         )}
       </section>
 
-      <section className="section-shell pb-7">
-        <div className="grid rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] md:grid-cols-3">
-          <ContactStrip icon={<FiInstagram />} label="Instagram" value="@ahmad_harahaap" />
-          <ContactStrip icon={<FiPhone />} label="WhatsApp" value="+62 877-6888-5573" />
-          <ContactStrip icon={<FiMail />} label="Email" value={person.publicEmail ?? "afadillah117@gmail.com"} />
-        </div>
-      </section>
+      {contactItems.length ? (
+        <section className="section-shell pb-7">
+          <div className="grid rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] md:grid-cols-3">
+            {contactItems.slice(0, 3).map((item) => (
+              <ContactStrip key={item.label} icon={item.icon} label={item.label} value={item.value} />
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       {certificateCount ? (
         <p className="sr-only">{certificateCount} sertifikasi profesional tersedia di halaman sertifikat.</p>
@@ -230,10 +221,11 @@ function SectionTitle({ icon, title }: { icon: ReactNode; title: string }) {
 
 function FeaturedProject({ project }: { project: Project }) {
   const metric = project.metrics?.[0];
+  const imageUrl = getProjectImageUrl(project);
   return (
     <Link href={`/projects/${project.slug}`} className="mt-5 grid gap-5 sm:grid-cols-[210px_1fr]">
-      <div className="relative min-h-36 overflow-hidden rounded-[8px] bg-[color:var(--surface-soft)]">
-        <Image src="/me-about.jpeg" alt="" fill sizes="210px" className="object-cover object-[center_16%] opacity-85 grayscale" />
+      <div className="relative grid min-h-36 place-items-center overflow-hidden rounded-[8px] bg-[color:var(--surface-soft)] text-3xl text-[color:var(--primary)]">
+        {imageUrl ? <Image src={imageUrl} alt={project.title} fill sizes="210px" className="object-cover object-center" /> : <FiBriefcase aria-hidden />}
         <div className="absolute inset-0 bg-[color:var(--primary)]/12" />
       </div>
       <div>
@@ -266,6 +258,26 @@ function ContactStrip({ icon, label, value }: { icon: ReactNode; label: string; 
       </div>
     </div>
   );
+}
+
+function getProfileImageUrl(profile: Profile, type: "profile" | "hero") {
+  return type === "hero"
+    ? profile.heroImageUrl ?? profile.heroImage?.secureUrl ?? null
+    : profile.profileImageUrl ?? profile.profileImage?.secureUrl ?? null;
+}
+
+function getProjectImageUrl(project: Project) {
+  return project.thumbnail?.secureUrl ?? project.images?.[0]?.secureUrl ?? project.images?.[0]?.media?.secureUrl ?? null;
+}
+
+function getContactItems(profile: Profile, socials: { label: string; url: string }[]) {
+  const items: Array<{ label: string; value: string; icon: ReactNode } | null> = [
+    ...socials.map((item) => ({ label: item.label, value: item.url, icon: <FiUsers /> })),
+    profile.whatsapp ? { label: "WhatsApp", value: profile.whatsapp, icon: <FiPhone /> } : null,
+    profile.publicEmail ? { label: "Email", value: profile.publicEmail, icon: <FiMail /> } : null,
+  ];
+
+  return items.filter((item): item is { label: string; value: string; icon: ReactNode } => Boolean(item));
 }
 
 function DotGrid({ className }: { className?: string }) {

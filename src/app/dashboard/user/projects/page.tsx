@@ -33,10 +33,12 @@ export default async function ProjectsPage() {
 }
 
 function FeaturedProject({ project }: { project: Project }) {
+  const imageUrl = getProjectImageUrl(project);
+
   return (
     <Link href={`/projects/${project.slug}`} className="group grid overflow-hidden rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] lg:grid-cols-[0.9fr_1.25fr]">
-      <div className="relative min-h-[290px] bg-[color:var(--surface-soft)]">
-        <Image src="/me-about.jpeg" alt="" fill sizes="(min-width: 1024px) 42vw, 100vw" className="object-cover object-[center_18%] grayscale transition group-hover:scale-[1.03]" />
+      <div className="relative grid min-h-[290px] place-items-center bg-[color:var(--surface-soft)] text-5xl text-[color:var(--primary)]">
+        {imageUrl ? <Image src={imageUrl} alt={project.title} fill sizes="(min-width: 1024px) 42vw, 100vw" className="object-cover object-center transition group-hover:scale-[1.03]" /> : <FiBriefcase aria-hidden />}
         <span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-[6px] bg-[color:var(--surface)] px-4 py-2 text-sm font-semibold text-[color:var(--primary)]">
           <FiStar /> Proyek Unggulan
         </span>
@@ -66,10 +68,12 @@ function FeaturedProject({ project }: { project: Project }) {
 }
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const imageUrl = getProjectImageUrl(project);
+
   return (
     <Link href={`/projects/${project.slug}`} className="group overflow-hidden rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] transition hover:-translate-y-1 hover:border-[color:var(--primary)]">
-      <div className="relative aspect-[4/3] bg-[color:var(--surface-soft)]">
-        <Image src="/me-about.jpeg" alt="" fill sizes="20vw" className="object-cover object-[center_20%] grayscale transition group-hover:scale-[1.04]" />
+      <div className="relative grid aspect-[4/3] place-items-center bg-[color:var(--surface-soft)] text-4xl text-[color:var(--primary)]">
+        {imageUrl ? <Image src={imageUrl} alt={project.title} fill sizes="20vw" className="object-cover object-center transition group-hover:scale-[1.04]" /> : iconFor(index)}
       </div>
       <div className="p-5">
         <span className="grid size-12 place-items-center rounded-full bg-[color:var(--surface-soft)] text-xl text-[color:var(--primary)]">{iconFor(index)}</span>
@@ -83,4 +87,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
 function iconFor(index: number) {
   return [<FiUsers key="u" />, <FiBarChart2 key="b" />, <FiBookOpen key="l" />, <FiBriefcase key="e" />, <FiTarget key="t" />][index % 5];
+}
+
+function getProjectImageUrl(project: Project) {
+  return project.thumbnail?.secureUrl ?? project.images?.[0]?.secureUrl ?? project.images?.[0]?.media?.secureUrl ?? null;
 }

@@ -2,7 +2,8 @@ import type { ApiResponse } from "@/types/api";
 import { getApiBaseUrl } from "./api-config";
 
 export async function clientRequest<T>(path: string, init: RequestInit = {}) {
-  const response = await fetch(`${getApiBaseUrl()}${path}`, {
+  const baseUrl = typeof window === "undefined" ? getApiBaseUrl() : "/api/backend";
+  const response = await fetch(`${baseUrl}${path}`, {
     credentials: "include",
     ...init,
     headers: {

@@ -12,6 +12,6 @@ export function refreshSession() {
   return clientRequest("/auth/refresh", { method: "POST" });
 }
 
-export function changePassword(input: { currentPassword: string; newPassword: string }) {
+export function changePassword(input: { currentPassword: string; nextPassword: string }) {
   return clientRequest("/auth/change-password", { method: "POST", body: JSON.stringify(input) });
 }

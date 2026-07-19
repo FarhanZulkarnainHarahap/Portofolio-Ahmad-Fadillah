@@ -1,7 +1,13 @@
 import { requireAdmin } from "@/lib/require-admin";
-import { AdminUnavailableAction } from "@/components/admin/AdminUnavailableAction";
+import { AdminContentForm } from "@/components/admin/AdminContentForm";
 
 export default async function CreateExperiencePage() {
   await requireAdmin();
-  return <AdminUnavailableAction title="Tambah pengalaman" backHref="/dashboard/admin/experience" />;
+  return (
+    <div>
+      <p className="editorial-label">Pengalaman</p>
+      <h1 className="mt-3 font-heading text-4xl font-extrabold">Tambah pengalaman</h1>
+      <AdminContentForm backHref="/dashboard/admin/experience" mode="create" resource="experiences" />
+    </div>
+  );
 }
