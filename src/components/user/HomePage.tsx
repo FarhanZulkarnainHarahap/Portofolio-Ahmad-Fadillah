@@ -68,12 +68,12 @@ export async function HomePage() {
   return (
     <div>
       <section className="relative overflow-hidden border-b border-[color:var(--border)]">
-        <div className="section-shell grid min-h-[660px] gap-10 py-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:py-0">
-          <div className="relative z-10 py-10 lg:py-20">
+        <div className="section-shell grid gap-8 py-8 lg:min-h-[660px] lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-10 lg:py-0">
+          <div className="relative z-10 py-4 lg:py-20">
             <p className="inline-flex rounded-full bg-[color:var(--surface-soft)] px-4 py-2 text-sm font-semibold text-[color:var(--primary)]">
               {person.availabilityStatus}
             </p>
-            <h1 className="mt-5 max-w-3xl font-serif text-6xl font-semibold leading-[0.95] tracking-normal text-[color:var(--text-primary)] sm:text-7xl lg:text-8xl">
+            <h1 className="mt-5 max-w-3xl overflow-wrap-anywhere font-serif text-[clamp(3.35rem,14vw,5.25rem)] font-semibold leading-[0.95] tracking-normal text-[color:var(--text-primary)] lg:text-[clamp(4.75rem,6vw,6.75rem)]">
               {person.name}
             </h1>
             <p className="mt-4 font-serif text-2xl text-[color:var(--primary)]">{person.headline}</p>
@@ -87,26 +87,26 @@ export async function HomePage() {
               </Link>
             </div>
           </div>
-          <div className="relative hidden h-full min-h-[640px] lg:block">
-            <div className="absolute inset-y-0 left-0 w-[120%] rounded-l-[48%] bg-[color:var(--surface-soft)]" />
+          <div className="relative mx-auto h-full min-h-[420px] w-full max-w-sm overflow-hidden rounded-[12px] border border-[color:var(--border)] bg-[color:var(--surface-soft)] sm:min-h-[520px] lg:max-w-none lg:overflow-visible lg:rounded-none lg:border-0">
+            <div className="absolute inset-y-0 left-0 hidden w-[120%] rounded-l-[48%] bg-[color:var(--surface-soft)] lg:block" />
             <Image
               src="/me-about.jpeg"
               alt="Potret Ahamad Fadillah Harahap"
               fill
               priority
-              sizes="52vw"
-              className="object-cover object-[center_20%]"
+              sizes="(min-width: 1024px) 52vw, 90vw"
+              className="object-cover object-[center_18%]"
             />
-            <div className="absolute bottom-24 right-20 grid size-28 place-items-center rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] text-center text-[10px] font-bold uppercase tracking-[0.18em] text-[color:var(--primary)] shadow-[var(--shadow-md)]">
+            <div className="absolute bottom-6 right-6 grid size-24 place-items-center rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] text-center text-[9px] font-bold uppercase tracking-[0.18em] text-[color:var(--primary)] shadow-[var(--shadow-md)] lg:bottom-24 lg:right-20 lg:size-28 lg:text-[10px]">
               People<br />Process<br />Growth
             </div>
-            <DotGrid className="absolute bottom-24 right-0" />
+            <DotGrid className="absolute bottom-20 right-3 lg:bottom-24 lg:right-0" />
           </div>
         </div>
       </section>
 
-      <section className="section-shell -mt-12 relative z-20">
-        <div className="grid rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] shadow-[var(--shadow-md)] md:grid-cols-2 lg:grid-cols-4">
+      <section className="section-shell relative z-20 mt-6 lg:-mt-12">
+        <div className="grid grid-cols-2 rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] shadow-[var(--shadow-md)] lg:grid-cols-4">
           {statisticItems.slice(0, 4).map((stat, index) => (
             <StatBox key={stat.id} stat={stat} icon={index} />
           ))}
@@ -169,7 +169,7 @@ export async function HomePage() {
           <article className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
             <SectionTitle icon={<FiAward />} title="Konten Profesional" />
             <p className="mt-5 text-sm leading-7 text-[color:var(--text-secondary)]">
-              Proyek, pencapaian, artikel, dan sertifikat akan tampil otomatis setelah kamu input dari dashboard admin.
+              Proyek, pencapaian, artikel, dan sertifikat akan ditampilkan saat konten publiknya sudah siap.
             </p>
           </article>
         )}
@@ -207,13 +207,13 @@ function StatBox({ stat, icon }: { stat: Statistic; icon: number }) {
   const Icon = [FiUsers, FiBriefcase, FiBookOpen, FiAward][icon] ?? FiBarChart2;
   const value = stat.unit === "S1" ? "S1" : `${stat.value}${stat.unit ?? ""}`;
   return (
-    <div className="grid grid-cols-[64px_1fr] gap-4 border-b border-[color:var(--border)] p-6 last:border-b-0 md:border-r md:last:border-r-0 lg:border-b-0">
-      <span className="grid size-16 place-items-center rounded-full bg-[color:var(--surface-soft)] text-2xl text-[color:var(--primary)]">
+    <div className="grid gap-3 border-b border-r border-[color:var(--border)] p-4 even:border-r-0 last:border-b-0 sm:grid-cols-[56px_1fr] sm:p-5 lg:border-b-0 lg:last:border-r-0">
+      <span className="grid size-12 place-items-center rounded-full bg-[color:var(--surface-soft)] text-xl text-[color:var(--primary)] sm:size-14 sm:text-2xl">
         <Icon aria-hidden />
       </span>
       <div>
-        <p className="font-serif text-4xl font-semibold leading-none text-[color:var(--text-primary)]">{value}</p>
-        <p className="mt-1 text-sm font-semibold leading-5 text-[color:var(--text-primary)]">{stat.label}</p>
+        <p className="font-serif text-3xl font-semibold leading-none text-[color:var(--text-primary)] sm:text-4xl">{value}</p>
+        <p className="mt-1 text-xs font-semibold leading-5 text-[color:var(--text-primary)] sm:text-sm">{stat.label}</p>
       </div>
     </div>
   );

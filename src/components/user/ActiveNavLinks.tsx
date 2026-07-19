@@ -13,7 +13,7 @@ export function ActiveNavLinks({ items }: { items: NavItem[] }) {
   const pathname = usePathname();
 
   return (
-    <div className="hidden items-center gap-7 lg:flex" aria-label="Navigasi desktop">
+    <div className="hidden items-center gap-5 xl:flex 2xl:gap-7" aria-label="Navigasi desktop">
       {items.map((item) => {
         const active = item.href === "/" ? pathname === "/" : pathname === item.href || pathname.startsWith(`${item.href}/`);
         return (

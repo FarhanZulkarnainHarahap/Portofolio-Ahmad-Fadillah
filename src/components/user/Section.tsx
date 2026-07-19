@@ -17,12 +17,12 @@ export function Section({ eyebrow, title, description, children, tone = "default
         : "";
 
   return (
-    <section className={`relative py-16 sm:py-20 lg:py-28 ${toneClass}`}>
+    <section className={`relative py-12 sm:py-16 lg:py-20 ${toneClass}`}>
       <div className="section-shell">
-        <div className="mb-9 grid gap-4 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+        <div className="mb-7 grid gap-4 lg:mb-9 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
           <div>
             {eyebrow ? <p className="editorial-label">{eyebrow}</p> : null}
-            <h2 className="mt-3 max-w-3xl font-serif text-4xl font-semibold leading-tight tracking-normal text-[color:var(--text-primary)] sm:text-5xl">
+            <h2 className="mt-3 max-w-3xl overflow-wrap-anywhere font-serif text-[clamp(2rem,8.5vw,3.25rem)] font-semibold leading-[1.05] tracking-normal text-[color:var(--text-primary)] lg:text-[clamp(2.75rem,4vw,4rem)]">
               {title}
             </h2>
           </div>

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FiArrowRight, FiBarChart2, FiBookOpen, FiBriefcase, FiStar, FiTarget, FiUsers } from "react-icons/fi";
 import type { Project } from "@/types/api";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { PageHeader } from "@/components/user/PageHeader";
 import { Section } from "@/components/user/Section";
 import { getPublicProjects } from "@/services/project.server-service";
@@ -15,7 +16,7 @@ export default async function ProjectsPage() {
   return (
     <>
       <PageHeader title="Proyek" description="Proyek HR yang berdampak pada organisasi dan karyawan." />
-      <Section title="Proyek akan tampil dari data yang kamu input melalui dashboard admin.">
+      <Section title="Kumpulan proyek Human Resources.">
         {featured ? (
           <>
             <FeaturedProject project={featured} />
@@ -24,7 +25,7 @@ export default async function ProjectsPage() {
             </div>
           </>
         ) : (
-          <EmptyState text="Belum ada proyek publik. Tambahkan proyek dari dashboard admin saat kontennya sudah siap." />
+          <EmptyState title="Belum ada proyek yang ditampilkan." description="Studi kasus dan proyek HR akan tersedia setelah siap dipublikasikan." />
         )}
       </Section>
     </>
@@ -78,10 +79,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       </div>
     </Link>
   );
-}
-
-function EmptyState({ text }: { text: string }) {
-  return <div className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-8 text-[color:var(--text-secondary)]">{text}</div>;
 }
 
 function iconFor(index: number) {

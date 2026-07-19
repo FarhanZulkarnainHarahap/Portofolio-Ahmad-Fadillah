@@ -178,8 +178,12 @@ a {
 }
 
 .section-shell {
-  width: min(100% - 2rem, 1280px);
+  width: min(100% - clamp(2.5rem, 7vw, 8rem), 1360px);
   margin-inline: auto;
+}
+
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
 }
 
 .editorial-label {
@@ -189,7 +193,7 @@ a {
   color: var(--secondary);
   font-size: 0.78rem;
   font-weight: 800;
-  letter-spacing: 0.14em;
+  letter-spacing: clamp(0.08em, 0.8vw, 0.14em);
   text-transform: uppercase;
 }
 

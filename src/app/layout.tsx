@@ -18,6 +18,19 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Portofolio Human Resources",
   description: "Portofolio profesional Human Resources yang berbasis data, people development, dan employee experience.",
+  icons: {
+    icon: [
+      {
+        url: "/favicon.ico",
+        sizes: "any",
+      },
+      {
+        url: "/favicon.svg",
+        type: "image/svg+xml",
+      },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

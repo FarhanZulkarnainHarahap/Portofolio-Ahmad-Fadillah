@@ -1,4 +1,5 @@
 import { FiAward, FiBarChart2, FiBookOpen, FiCalendar, FiFileText, FiPieChart, FiTarget, FiUsers } from "react-icons/fi";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { PageHeader } from "@/components/user/PageHeader";
 import { Section } from "@/components/user/Section";
 import { getPublicAchievements } from "@/services/achievement.service";
@@ -11,7 +12,7 @@ export default async function AchievementsPage() {
   return (
     <>
       <PageHeader title="Pencapaian" description="Bukti pencapaian profesional dalam perjalanan Human Resources." eyebrow="Achievements • Impact • Results" />
-      <Section title="Pencapaian akan tampil dari data yang kamu input melalui dashboard admin.">
+      <Section title="Capaian profesional yang dipublikasikan.">
         {items.length ? (
           <div className="grid gap-6">
             <div className="grid rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] sm:grid-cols-2 lg:grid-cols-5">
@@ -26,7 +27,7 @@ export default async function AchievementsPage() {
             </div>
           </div>
         ) : (
-          <EmptyState text="Belum ada pencapaian publik. Tambahkan dari dashboard admin saat datanya sudah siap." />
+          <EmptyState title="Belum ada pencapaian yang tersedia." description="Capaian dan metrik profesional akan muncul saat sudah dipublikasikan." />
         )}
       </Section>
     </>
@@ -53,10 +54,6 @@ function AchievementCard({ item, index }: { item: SimpleContent; index: number }
       {typeof item.category === "string" ? <span className="mt-4 inline-flex rounded-[6px] bg-[color:var(--primary-soft)] px-3 py-1 text-xs font-semibold text-[color:var(--primary)]">{item.category}</span> : null}
     </article>
   );
-}
-
-function EmptyState({ text }: { text: string }) {
-  return <div className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-8 text-[color:var(--text-secondary)]">{text}</div>;
 }
 
 function iconFor(index: number) {

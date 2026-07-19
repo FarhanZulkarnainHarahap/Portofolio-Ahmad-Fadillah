@@ -28,13 +28,13 @@ export async function NavBar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-[color:var(--border)] bg-[color:var(--surface)]/92 px-4 backdrop-blur-xl">
-      <nav className="mx-auto flex max-w-[1500px] items-center justify-between gap-4" aria-label="Navigasi utama">
+      <nav className="mx-auto flex h-16 max-w-[1360px] items-center justify-between gap-3 md:h-[72px]" aria-label="Navigasi utama">
         <BrandLogo href="/" brandName={person?.name} tagline="Human Resources Portfolio" variant="horizontal" size="md" />
         <ActiveNavLinks items={navItems} />
         <div className="flex items-center gap-2">
           <Link
             href="/certificate"
-            className="hidden min-h-11 items-center gap-2 rounded-[6px] bg-[color:var(--primary)] px-5 text-sm font-bold text-[color:var(--text-on-primary)] shadow-[var(--shadow-sm)] transition hover:bg-[color:var(--primary-hover)] sm:inline-flex"
+            className="hidden min-h-11 items-center gap-2 rounded-[6px] bg-[color:var(--primary)] px-5 text-sm font-bold text-[color:var(--text-on-primary)] shadow-[var(--shadow-sm)] transition hover:bg-[color:var(--primary-hover)] xl:inline-flex"
           >
             <FiDownload aria-hidden />
             <span>Download CV</span>

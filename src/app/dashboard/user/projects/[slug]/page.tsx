@@ -9,7 +9,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const { slug } = await params;
   const response = await getPublicProject(slug).catch(() => null);
   const project = response?.data;
-  if (!project) return <EmptyState title="Project tidak ditemukan." />;
+  if (!project) return <EmptyState title="Proyek tidak ditemukan." />;
 
   const info: { label: string; value: string }[] = [
     { label: "Organisasi", value: project.organization ?? "" },
@@ -26,7 +26,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div>
               <p className="editorial-label">{project.category?.name ?? "Case Study"}</p>
-              <h1 className="mt-4 font-heading text-4xl font-extrabold leading-tight tracking-normal text-[color:var(--text-primary)] sm:text-6xl">{project.title}</h1>
+              <h1 className="mt-4 overflow-wrap-anywhere font-heading text-[clamp(2.5rem,10vw,4rem)] font-extrabold leading-tight tracking-normal text-[color:var(--text-primary)]">{project.title}</h1>
               {project.shortDescription ? <p className="mt-5 max-w-3xl text-lg leading-8 text-[color:var(--text-secondary)]">{project.shortDescription}</p> : null}
             </div>
             <div className="premium-card grid gap-4 p-5 sm:grid-cols-2">

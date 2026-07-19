@@ -14,14 +14,14 @@ export async function Footer() {
 
   return (
     <footer className="border-t border-[color:var(--border)] bg-[color:var(--surface-soft)]">
-      <div className="mx-auto grid max-w-[1500px] items-center gap-5 px-4 py-6 text-sm text-[color:var(--text-secondary)] lg:grid-cols-[1fr_auto_1fr]">
+      <div className="mx-auto grid max-w-[1360px] items-center gap-4 px-6 py-6 text-sm text-[color:var(--text-secondary)] sm:px-8 lg:grid-cols-[1fr_auto_1fr]">
         <div>
           <BrandLogo brandName="Portofolio HR" tagline="Human Resources Portfolio" variant="horizontal" size="sm" />
           <p className="mt-1 text-xs">© {new Date().getFullYear()} {person?.name ?? "Ahamad Fadillah Harahap"}. All rights reserved.</p>
         </div>
-        <p className="font-serif italic text-[color:var(--text-secondary)]">Empowering People, Growing Together.</p>
-        <div className="flex flex-wrap gap-5 lg:justify-end">
-          {(footerNav.length ? footerNav : fallbackFooter).slice(0, 7).map((item) => (
+        <p className="font-serif text-base italic text-[color:var(--text-secondary)] lg:text-center">Empowering People, Growing Together.</p>
+        <div className="grid grid-cols-2 gap-x-5 gap-y-3 sm:flex sm:flex-wrap lg:justify-end">
+          {(footerNav.length ? footerNav : fallbackFooter).slice(0, 8).map((item) => (
             <Link className="text-xs font-medium text-[color:var(--text-primary)] hover:text-[color:var(--primary)]" key={item.id} href={item.href}>{item.label}</Link>
           ))}
           {socials.slice(0, 1).map((item) => (
@@ -39,6 +39,7 @@ const fallbackFooter = [
   { id: "experience", label: "Pengalaman", href: "/experience" },
   { id: "achievement", label: "Pencapaian", href: "/achievement" },
   { id: "projects", label: "Proyek", href: "/projects" },
+  { id: "certificate", label: "Sertifikat", href: "/certificate" },
   { id: "blog", label: "Blog", href: "/blog" },
   { id: "contact", label: "Kontak", href: "/contact" },
 ];

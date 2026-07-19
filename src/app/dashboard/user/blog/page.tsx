@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FiArrowRight, FiCalendar, FiClock, FiStar } from "react-icons/fi";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { PageHeader } from "@/components/user/PageHeader";
 import { Section } from "@/components/user/Section";
 import { getPublicBlogPosts } from "@/services/blog.service";
@@ -15,7 +16,7 @@ export default async function BlogPage() {
   return (
     <>
       <PageHeader title="Artikel" description="Tulisan dan insight Human Resources untuk people, growth, dan culture." eyebrow="Blog • Human Resources" />
-      <Section title="Artikel akan tampil dari data yang kamu input melalui dashboard admin.">
+      <Section title="Insight Human Resources pilihan.">
         {featured ? (
           <>
             <Link href={`/blog/${featured.slug}`} className="group grid overflow-hidden rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] lg:grid-cols-[0.78fr_1fr]">
@@ -38,7 +39,7 @@ export default async function BlogPage() {
             </div>
           </>
         ) : (
-          <EmptyState text="Belum ada artikel publik. Tambahkan artikel dari dashboard admin saat kontennya sudah siap." />
+          <EmptyState title="Belum ada artikel yang tersedia." description="Tulisan dan insight HR akan muncul setelah siap dipublikasikan." />
         )}
       </Section>
     </>
@@ -59,10 +60,6 @@ function BlogCard({ post }: { post: SimpleContent }) {
       </div>
     </Link>
   );
-}
-
-function EmptyState({ text }: { text: string }) {
-  return <div className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-8 text-[color:var(--text-secondary)]">{text}</div>;
 }
 
 function categoryLabel(category: SimpleContent["category"]) {

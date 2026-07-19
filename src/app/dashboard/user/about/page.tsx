@@ -68,8 +68,8 @@ export default async function AboutPage() {
       <Section title="Nilai yang Saya Pegang" tone="default">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {values.map(({ title, text, icon: Icon }) => (
-            <article key={title} className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
-              <span className="grid size-14 place-items-center rounded-full bg-[color:var(--surface-soft)] text-2xl text-[color:var(--primary)]">
+            <article key={title} className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-5 sm:p-6">
+              <span className="grid size-12 place-items-center rounded-full bg-[color:var(--surface-soft)] text-xl text-[color:var(--primary)] sm:size-14 sm:text-2xl">
                 <Icon aria-hidden />
               </span>
               <p className="mt-4 font-serif text-xl font-semibold text-[color:var(--text-primary)]">{title}</p>
@@ -80,9 +80,9 @@ export default async function AboutPage() {
       </Section>
 
       <Section title="Tools yang Digunakan" tone="muted">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {tools.slice(0, 6).map((tool) => (
-            <div key={tool.id} className="flex min-h-16 items-center justify-center rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] px-4 text-center font-semibold text-[color:var(--text-primary)]">
+            <div key={tool.id} className="flex min-h-12 items-center justify-center rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] px-3 text-center text-sm font-semibold leading-tight text-[color:var(--text-primary)] sm:min-h-14">
               {tool.name}
             </div>
           ))}
@@ -94,8 +94,8 @@ export default async function AboutPage() {
 
 function InfoCard({ icon, label, value, detail }: { icon: React.ReactNode; label: string; value: string; detail?: string }) {
   return (
-    <article className="grid grid-cols-[64px_1fr] gap-4 rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-5">
-      <span className="grid size-14 place-items-center rounded-full bg-[color:var(--surface-soft)] text-2xl text-[color:var(--primary)]">{icon}</span>
+    <article className="grid grid-cols-[52px_1fr] gap-4 rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-4 sm:grid-cols-[58px_1fr] sm:p-5">
+      <span className="grid size-12 place-items-center rounded-full bg-[color:var(--surface-soft)] text-xl text-[color:var(--primary)] sm:size-14 sm:text-2xl">{icon}</span>
       <div>
         <p className="font-serif text-xl font-semibold text-[color:var(--text-primary)]">{label}</p>
         <p className="mt-1 font-semibold text-[color:var(--text-secondary)]">{value}</p>

@@ -59,11 +59,11 @@ export default async function ContactPage() {
 
 function ContactItem({ icon, label, value, helper, href }: { icon: ReactNode; label: string; value: string; helper?: string; href?: string }) {
   const content = (
-    <span className="grid grid-cols-[64px_1fr_20px] items-center gap-4 border-b border-[color:var(--border)] pb-5 last:border-b-0 last:pb-0">
-      <span className="grid size-14 place-items-center rounded-full bg-[color:var(--surface-soft)] text-3xl text-[color:var(--primary)]">{icon}</span>
-      <span>
+    <span className="grid grid-cols-[52px_minmax(0,1fr)_20px] items-center gap-4 border-b border-[color:var(--border)] pb-5 last:border-b-0 last:pb-0 sm:grid-cols-[64px_minmax(0,1fr)_20px]">
+      <span className="grid size-12 place-items-center rounded-full bg-[color:var(--surface-soft)] text-2xl text-[color:var(--primary)] sm:size-14 sm:text-3xl">{icon}</span>
+      <span className="min-w-0">
         <span className="block font-serif text-xl font-semibold text-[color:var(--text-primary)]">{label}</span>
-        <span className="mt-1 block font-semibold text-[color:var(--text-primary)]">{value}</span>
+        <span className="mt-1 block overflow-wrap-anywhere font-semibold text-[color:var(--text-primary)]">{value}</span>
         {helper ? <span className="mt-1 block text-sm text-[color:var(--primary)]">{helper}</span> : null}
       </span>
       {href ? <FiExternalLink className="text-[color:var(--primary)]" /> : <span />}

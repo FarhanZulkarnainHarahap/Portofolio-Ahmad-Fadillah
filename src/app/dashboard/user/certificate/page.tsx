@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FiArrowRight, FiAward, FiCalendar } from "react-icons/fi";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { PageHeader } from "@/components/user/PageHeader";
 import { Section } from "@/components/user/Section";
 import { getPublicCertificates } from "@/services/certificate.service";
@@ -13,7 +14,7 @@ export default async function CertificationsPage() {
   return (
     <>
       <PageHeader title="Sertifikasi" description="Sertifikasi profesional dan bukti pembelajaran berkelanjutan." eyebrow="Human Resources • Professional Growth" />
-      <Section title="Sertifikat akan tampil dari data dan file yang kamu input melalui dashboard admin.">
+      <Section title="Sertifikasi dan dokumen profesional.">
         {featured ? (
           <>
             <Link href={`/certificate/${featured.slug ?? featured.id}`} className="group grid overflow-hidden rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface-soft)] p-8 lg:grid-cols-[0.58fr_0.42fr] lg:items-center">
@@ -35,7 +36,7 @@ export default async function CertificationsPage() {
             </div>
           </>
         ) : (
-          <EmptyState text="Belum ada sertifikat publik. Input sertifikat dan file PDF dari dashboard admin saat sudah siap." />
+          <EmptyState title="Belum ada sertifikat yang dipublikasikan." description="Sertifikat dan dokumen pendukung akan tersedia di halaman ini." />
         )}
       </Section>
     </>
@@ -65,8 +66,4 @@ function CertificateMock({ title, issuer, compact = false, accent = false }: { t
       </div>
     </div>
   );
-}
-
-function EmptyState({ text }: { text: string }) {
-  return <div className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-8 text-[color:var(--text-secondary)]">{text}</div>;
 }

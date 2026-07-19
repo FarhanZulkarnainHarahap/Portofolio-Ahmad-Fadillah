@@ -14,8 +14,8 @@ type BrandLogoProps = {
 };
 
 const sizeMap: Record<BrandLogoSize, { mark: string; name: string; tagline: string; gap: string }> = {
-  sm: { mark: "size-9", name: "text-base", tagline: "text-[10px]", gap: "gap-2" },
-  md: { mark: "size-10", name: "text-2xl", tagline: "text-[11px]", gap: "gap-3" },
+  sm: { mark: "size-8 sm:size-9", name: "text-[clamp(1.05rem,4.8vw,1.35rem)]", tagline: "text-[10px]", gap: "gap-2" },
+  md: { mark: "size-8 sm:size-10", name: "text-[clamp(1.35rem,5vw,1.75rem)]", tagline: "text-[11px]", gap: "gap-2 sm:gap-3" },
   lg: { mark: "size-14", name: "text-xl", tagline: "text-xs", gap: "gap-3" },
   xl: { mark: "size-20", name: "text-3xl", tagline: "text-sm", gap: "gap-4" },
 };
