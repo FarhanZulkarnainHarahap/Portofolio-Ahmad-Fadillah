@@ -23,10 +23,14 @@ export function LoginForm() {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginValues>({ resolver: zodResolver(schema) });
 
   async function onSubmit(values: LoginValues) {
-    await login(values);
-    toast.success("Login berhasil.");
-    router.replace(getLoginRedirect(searchParams.get("callbackUrl")));
-    router.refresh();
+    try {
+      await login(values);
+      toast.success("Login berhasil.");
+      router.replace(getLoginRedirect(searchParams.get("callbackUrl")));
+      router.refresh();
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Login gagal.");
+    }
   }
 
   return (
