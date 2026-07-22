@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { FiArrowRight, FiAward, FiCalendar } from "react-icons/fi";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { PageHeader } from "@/components/user/PageHeader";
@@ -17,18 +19,18 @@ export default async function CertificationsPage() {
       <Section title="Sertifikasi dan dokumen profesional.">
         {featured ? (
           <>
-            <Link href={`/certificate/${featured.slug ?? featured.id}`} className="group grid overflow-hidden rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface-soft)] p-8 lg:grid-cols-[0.58fr_0.42fr] lg:items-center">
+            <CertificateAction item={featured} className="group grid overflow-hidden rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface-soft)] p-6 transition hover:border-[color:var(--primary)] sm:p-8 lg:grid-cols-[0.58fr_0.42fr] lg:items-center">
               <div className="grid grid-cols-[96px_1fr] gap-6">
                 <span className="grid size-24 place-items-center rounded-full bg-[color:var(--surface)] text-5xl text-[color:var(--primary)]"><FiAward /></span>
                 <div>
                   <p className="font-semibold text-[color:var(--primary)]">Sertifikasi Unggulan</p>
                   <h2 className="mt-3 font-serif text-4xl font-semibold leading-tight text-[color:var(--text-primary)]">{featured.name ?? featured.title}</h2>
                   <p className="mt-2 text-lg text-[color:var(--text-secondary)]">{featured.issuer}</p>
-                  <p className="mt-8 inline-flex items-center gap-3 font-semibold text-[color:var(--primary)]">Lihat Detail <FiArrowRight /></p>
+                  <p className="mt-8 inline-flex items-center gap-3 font-semibold text-[color:var(--primary)]">Unduh Sertifikat <FiArrowRight /></p>
                 </div>
               </div>
-              <CertificateMock title={featured.name ?? featured.title ?? "Certificate"} issuer={featured.issuer ?? "Certification Institute"} accent />
-            </Link>
+              <CertificatePreview item={featured} accent />
+            </CertificateAction>
             <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {items.slice(1).map((item, index) => (
                 <CertificateCard key={item.id} item={item} accent={index % 2 === 0} />
@@ -45,14 +47,44 @@ export default async function CertificationsPage() {
 
 function CertificateCard({ item, accent }: { item: SimpleContent; accent: boolean }) {
   return (
-    <Link href={`/certificate/${item.slug ?? item.id}`} className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-5 transition hover:-translate-y-1 hover:border-[color:var(--primary)]">
-      <CertificateMock title={item.name ?? item.title ?? "Certificate"} issuer={item.issuer ?? "HR Institute"} compact accent={accent} />
+    <CertificateAction item={item} className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-5 transition hover:-translate-y-1 hover:border-[color:var(--primary)]">
+      <CertificatePreview item={item} compact accent={accent} />
       <h3 className="mt-5 font-serif text-2xl font-semibold leading-tight text-[color:var(--text-primary)]">{item.name ?? item.title}</h3>
       <p className="mt-1 text-[color:var(--text-secondary)]">{item.issuer}</p>
-      {item.year ? <p className="mt-3 inline-flex items-center gap-2 text-sm text-[color:var(--text-muted)]"><FiCalendar />{item.year}</p> : null}
-      <p className="mt-5 inline-flex items-center gap-3 text-sm font-semibold text-[color:var(--primary)]">Lihat Detail <FiArrowRight /></p>
+      {getIssuedYear(item) ? <p className="mt-3 inline-flex items-center gap-2 text-sm text-[color:var(--text-muted)]"><FiCalendar />{getIssuedYear(item)}</p> : null}
+      <p className="mt-5 inline-flex items-center gap-3 text-sm font-semibold text-[color:var(--primary)]">Unduh Sertifikat <FiArrowRight /></p>
+    </CertificateAction>
+  );
+}
+
+function CertificateAction({ item, className, children }: { item: SimpleContent; className: string; children: ReactNode }) {
+  const downloadUrl = getCertificateDownloadUrl(item);
+  if (downloadUrl) {
+    return (
+      <a href={downloadUrl} target="_blank" rel="noreferrer" download className={className}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={`/certificate/${item.slug ?? item.id}`} className={className}>
+      {children}
     </Link>
   );
+}
+
+function CertificatePreview({ item, compact = false, accent = false }: { item: SimpleContent; compact?: boolean; accent?: boolean }) {
+  const imageUrl = getCertificateImageUrl(item);
+  if (imageUrl) {
+    return (
+      <div className={`relative overflow-hidden rounded-[4px] border border-[color:var(--border-strong)] bg-[color:var(--surface)] shadow-[var(--shadow-sm)] ${compact ? "aspect-[16/9]" : "min-h-48"}`}>
+        <Image src={imageUrl} alt={item.name ?? item.title ?? "Sertifikat"} fill sizes={compact ? "(min-width: 1024px) 25vw, 50vw" : "(min-width: 1024px) 36vw, 100vw"} className="object-cover object-center transition group-hover:scale-[1.02]" />
+      </div>
+    );
+  }
+
+  return <CertificateMock title={item.name ?? item.title ?? "Certificate"} issuer={item.issuer ?? "HR Institute"} compact={compact} accent={accent} />;
 }
 
 function CertificateMock({ title, issuer, compact = false, accent = false }: { title: string; issuer: string; compact?: boolean; accent?: boolean }) {
@@ -66,4 +98,21 @@ function CertificateMock({ title, issuer, compact = false, accent = false }: { t
       </div>
     </div>
   );
+}
+
+function getCertificateDownloadUrl(item: SimpleContent) {
+  return item.credentialUrl ?? item.certificate?.secureUrl ?? null;
+}
+
+function getCertificateImageUrl(item: SimpleContent) {
+  if (item.certificate?.mediaType === "IMAGE") return item.certificate.secureUrl;
+  if (item.credentialUrl && /\.(jpe?g|png|webp|gif)(\?.*)?$/i.test(item.credentialUrl)) return item.credentialUrl;
+  return null;
+}
+
+function getIssuedYear(item: SimpleContent) {
+  if (item.year) return item.year;
+  if (!item.issuedAt) return null;
+  const year = new Date(item.issuedAt).getFullYear();
+  return Number.isFinite(year) ? year : null;
 }

@@ -13,6 +13,19 @@ export type ApiListResponse<T> = ApiResponse<T[]> & {
   };
 };
 
+export type Media = {
+  id: string;
+  secureUrl: string;
+  publicId: string;
+  resourceType: string;
+  mediaType: "IMAGE" | "PDF" | "VIDEO" | "RAW";
+  format?: string | null;
+  width?: number | null;
+  height?: number | null;
+  bytes?: number | null;
+  originalFilename?: string | null;
+};
+
 export type Profile = {
   id: string;
   name: string;
@@ -98,16 +111,21 @@ export type SimpleContent = {
   id: string;
   title?: string;
   name?: string;
+  credentialId?: string | null;
+  credentialUrl?: string | null;
+  certificateId?: string | null;
   description?: string | null;
   value?: string | null;
   unit?: string | null;
   year?: number | null;
+  issuedAt?: string | null;
   category?: string | { name: string } | null;
   issuer?: string | null;
   company?: string | null;
   content?: string | null;
   excerpt?: string | null;
   slug?: string;
+  certificate?: Media | null;
   coverImage?: { secureUrl?: string | null } | null;
   image?: { secureUrl?: string | null } | null;
   thumbnail?: { secureUrl?: string | null } | null;

@@ -3,10 +3,10 @@
 import { useRouter } from "next/navigation";
 import { type FormEvent, type ReactNode, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { createAdminResource, updateAdminResource } from "@/services/admin-client.service";
+import { createAdminResource, updateAdminResource, uploadAdminMedia } from "@/services/admin-client.service";
 import type { AdminResourceRow } from "@/services/admin-resource.service";
 
-type FieldType = "text" | "textarea" | "number" | "date" | "checkbox" | "select" | "list" | "json";
+type FieldType = "text" | "textarea" | "number" | "date" | "checkbox" | "select" | "list" | "json" | "file";
 
 type FieldConfig = {
   name: string;
@@ -108,8 +108,7 @@ const FORM_CONFIGS: Record<string, { title: string; description: string; fields:
       { name: "expiresAt", label: "Tanggal Kedaluwarsa", type: "date" },
       { name: "neverExpires", label: "Tidak kedaluwarsa", type: "checkbox" },
       { name: "credentialId", label: "Credential ID", type: "text" },
-      { name: "credentialUrl", label: "URL Credential/PDF", type: "text" },
-      { name: "certificateId", label: "ID File Sertifikat", type: "text" },
+      { name: "certificateFile", label: "File Sertifikat", type: "file" },
       { name: "description", label: "Deskripsi", type: "textarea" },
       { name: "relatedSkills", label: "Skill Terkait", type: "list", placeholder: "Satu skill per baris" },
       { name: "sortOrder", label: "Urutan", type: "number" },
@@ -152,6 +151,7 @@ export function AdminContentForm({ mode, resource, backHref, initialData }: { mo
   const config = FORM_CONFIGS[resource];
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [values, setValues] = useState<Record<string, FormValue>>(() => buildInitialValues(config.fields, initialData));
+  const [files, setFiles] = useState<Record<string, File | null>>({});
 
   const gridFields = useMemo(() => config.fields.filter((field) => !["textarea", "list"].includes(field.type)), [config.fields]);
   const wideFields = useMemo(() => config.fields.filter((field) => ["textarea", "list", "json"].includes(field.type)), [config.fields]);
@@ -161,6 +161,14 @@ export function AdminContentForm({ mode, resource, backHref, initialData }: { mo
     setIsSubmitting(true);
     try {
       const payload = buildPayload(config.fields, values);
+      if (resource === "certifications" && files.certificateFile) {
+        const formData = new FormData();
+        formData.append("file", files.certificateFile);
+        formData.append("folder", "certifications");
+        const media = await uploadAdminMedia(formData);
+        payload.certificateId = media.id;
+        payload.credentialUrl = media.secureUrl;
+      }
       if (mode === "create") {
         await createAdminResource(resource, payload);
         toast.success("Data berhasil ditambahkan.");
@@ -185,12 +193,28 @@ export function AdminContentForm({ mode, resource, backHref, initialData }: { mo
 
         <div className="grid gap-4 md:grid-cols-2">
           {gridFields.map((field) => (
-            <Field key={field.name} field={field} value={values[field.name]} onChange={(value) => setValues((current) => ({ ...current, [field.name]: value }))} />
+            <Field
+              key={field.name}
+              existingFileUrl={resource === "certifications" && field.name === "certificateFile" ? getStringValue(initialData?.credentialUrl) : undefined}
+              field={field}
+              file={files[field.name] ?? null}
+              value={values[field.name]}
+              onChange={(value) => setValues((current) => ({ ...current, [field.name]: value }))}
+              onFileChange={(file) => setFiles((current) => ({ ...current, [field.name]: file }))}
+            />
           ))}
         </div>
 
         {wideFields.map((field) => (
-          <Field key={field.name} field={field} value={values[field.name]} onChange={(value) => setValues((current) => ({ ...current, [field.name]: value }))} />
+          <Field
+            key={field.name}
+            existingFileUrl={resource === "certifications" && field.name === "certificateFile" ? getStringValue(initialData?.credentialUrl) : undefined}
+            field={field}
+            file={files[field.name] ?? null}
+            value={values[field.name]}
+            onChange={(value) => setValues((current) => ({ ...current, [field.name]: value }))}
+            onFileChange={(file) => setFiles((current) => ({ ...current, [field.name]: file }))}
+          />
         ))}
       </section>
 
@@ -206,7 +230,21 @@ export function AdminContentForm({ mode, resource, backHref, initialData }: { mo
   );
 }
 
-function Field({ field, value, onChange }: { field: FieldConfig; value: FormValue | undefined; onChange: (value: FormValue) => void }) {
+function Field({
+  existingFileUrl,
+  field,
+  file,
+  value,
+  onChange,
+  onFileChange,
+}: {
+  existingFileUrl?: string;
+  field: FieldConfig;
+  file?: File | null;
+  value: FormValue | undefined;
+  onChange: (value: FormValue) => void;
+  onFileChange?: (file: File | null) => void;
+}) {
   const label = (
     <span>
       {field.label}
@@ -230,6 +268,32 @@ function Field({ field, value, onChange }: { field: FieldConfig; value: FormValu
           <option value="">Pilih...</option>
           {field.options?.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
         </select>
+      </Label>
+    );
+  }
+
+  if (field.type === "file") {
+    return (
+      <Label label={label}>
+        <input
+          accept="image/jpeg,image/png,image/webp,application/pdf"
+          className="form-input cursor-pointer file:mr-4 file:rounded-full file:border-0 file:bg-[color:var(--primary)] file:px-4 file:py-2 file:text-sm file:font-bold file:text-[color:var(--text-on-primary)]"
+          required={field.required && !existingFileUrl}
+          type="file"
+          onChange={(event) => onFileChange?.(event.target.files?.[0] ?? null)}
+        />
+        <span className="text-xs font-medium leading-5 text-[color:var(--text-muted)]">
+          {file
+            ? `File dipilih: ${file.name}`
+            : existingFileUrl
+              ? "Biarkan kosong jika tidak ingin mengganti file sertifikat."
+              : "Upload gambar sertifikat atau PDF. File akan tersimpan ke Cloudinary."}
+        </span>
+        {existingFileUrl ? (
+          <a className="w-fit text-xs font-bold text-[color:var(--primary)] hover:underline" href={existingFileUrl} target="_blank" rel="noreferrer">
+            Lihat file saat ini
+          </a>
+        ) : null}
       </Label>
     );
   }
@@ -265,6 +329,8 @@ function buildInitialValues(fields: FieldConfig[], data?: AdminResourceRow) {
       values[field.name] = listToTextarea(rawValue, field.name);
     } else if (field.type === "json") {
       values[field.name] = rawValue == null ? "" : JSON.stringify(rawValue, null, 2);
+    } else if (field.type === "file") {
+      values[field.name] = "";
     } else {
       values[field.name] = rawValue == null ? "" : String(rawValue);
     }
@@ -280,6 +346,8 @@ function buildPayload(fields: FieldConfig[], values: Record<string, FormValue>) 
       payload[field.name] = Boolean(value);
       continue;
     }
+
+    if (field.type === "file") continue;
 
     if (typeof value !== "string" || !value.trim()) continue;
 
@@ -329,4 +397,8 @@ function enumOptions(values: string[]) {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
+}
+
+function getStringValue(value: unknown) {
+  return typeof value === "string" && value.trim() ? value : undefined;
 }
