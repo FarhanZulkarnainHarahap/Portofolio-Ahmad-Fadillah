@@ -1,6 +1,13 @@
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { LoginForm } from "@/components/auth/LoginForm";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const cookieStore = await cookies();
+  if (cookieStore.get("accessToken")?.value) {
+    redirect("/dashboard/admin/home");
+  }
+
   return (
     <div className="mx-auto flex min-h-[70vh] max-w-md items-center px-4">
       <div className="w-full rounded-lg border border-[color:var(--border)] bg-[color:var(--surface)] p-6 shadow-[var(--shadow-sm)]">

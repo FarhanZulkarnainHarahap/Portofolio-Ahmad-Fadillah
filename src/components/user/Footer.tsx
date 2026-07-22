@@ -1,31 +1,26 @@
 import Link from "next/link";
 import { BrandLogo } from "@/components/branding/BrandLogo";
-import { getPublicProfile } from "@/services/profile.server-service";
 import { getPublicSettings } from "@/services/settings.service";
+import { staticContactLinks, staticProfile } from "@/lib/static-profile";
 
 export async function Footer() {
-  const [settings, profile] = await Promise.all([
-    getPublicSettings().catch(() => null),
-    getPublicProfile().catch(() => null),
-  ]);
+  const settings = await getPublicSettings().catch(() => null);
   const footerNav = settings?.data.navigation.filter((item) => item.location !== "admin").map((item) => ({ ...item, href: normalizeUserHref(item.href) })) ?? [];
-  const socials = settings?.data.socials ?? [];
-  const person = profile?.data;
 
   return (
     <footer className="border-t border-[color:var(--border)] bg-[color:var(--surface-soft)]">
-      <div className="mx-auto grid max-w-[1360px] items-center gap-4 px-6 py-6 text-sm text-[color:var(--text-secondary)] sm:px-8 lg:grid-cols-[1fr_auto_1fr]">
-        <div>
+      <div className="mx-auto grid min-w-0 max-w-[1360px] items-start gap-5 px-5 py-6 text-sm text-[color:var(--text-secondary)] sm:px-8 lg:grid-cols-[1fr_auto_1fr] lg:items-center">
+        <div className="min-w-0">
           <BrandLogo brandName="Portofolio HR" tagline="Human Resources Portfolio" variant="horizontal" size="sm" />
-          <p className="mt-1 text-xs">© {new Date().getFullYear()} {person?.name ?? "Portofolio HR"}. All rights reserved.</p>
+          <p className="mt-1 overflow-wrap-anywhere text-xs">© {new Date().getFullYear()} {staticProfile.name}. All rights reserved.</p>
         </div>
         <p className="font-serif text-base italic text-[color:var(--text-secondary)] lg:text-center">Empowering People, Growing Together.</p>
-        <div className="grid grid-cols-2 gap-x-5 gap-y-3 sm:flex sm:flex-wrap lg:justify-end">
+        <div className="grid min-w-0 grid-cols-2 gap-x-5 gap-y-3 sm:flex sm:flex-wrap lg:justify-end">
           {(footerNav.length ? footerNav : fallbackFooter).slice(0, 8).map((item) => (
             <Link className="text-xs font-medium text-[color:var(--text-primary)] hover:text-[color:var(--primary)]" key={item.id} href={item.href}>{item.label}</Link>
           ))}
-          {socials.slice(0, 1).map((item) => (
-            <a className="text-xs font-medium text-[color:var(--primary)]" key={item.id} href={item.url} target="_blank" rel="noreferrer">{item.label}</a>
+          {staticContactLinks.slice(0, 1).map((item) => (
+            <a className="text-xs font-medium text-[color:var(--primary)]" key={item.label} href={item.href} target="_blank" rel="noreferrer">{item.value}</a>
           ))}
         </div>
       </div>

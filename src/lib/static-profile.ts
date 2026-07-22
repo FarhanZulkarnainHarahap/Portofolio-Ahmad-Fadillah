@@ -16,19 +16,19 @@ export const staticProfile = {
 export const staticContactLinks = [
   {
     label: "Instagram",
-    value: staticProfile.instagramUrl,
+    value: "ahmad_harahaap",
     href: staticProfile.instagramUrl,
     type: "instagram",
   },
   {
     label: "WhatsApp",
-    value: `https://wa.me/${staticProfile.whatsapp}`,
+    value: staticProfile.whatsapp,
     href: `https://wa.me/${staticProfile.whatsapp}`,
     type: "whatsapp",
   },
   {
     label: "Email",
-    value: `mailto:${staticProfile.publicEmail}`,
+    value: staticProfile.publicEmail,
     href: `mailto:${staticProfile.publicEmail}`,
     type: "email",
   },

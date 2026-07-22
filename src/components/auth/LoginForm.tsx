@@ -1,13 +1,11 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { z } from "zod";
 import { login } from "@/services/auth.service";
-import { getLoginRedirect } from "@/lib/auth";
 
 const schema = z.object({
   email: z.string().email(),
@@ -17,8 +15,6 @@ const schema = z.object({
 type LoginValues = z.infer<typeof schema>;
 
 export function LoginForm() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginValues>({ resolver: zodResolver(schema) });
 
@@ -26,8 +22,7 @@ export function LoginForm() {
     try {
       await login(values);
       toast.success("Login berhasil.");
-      router.replace(getLoginRedirect(searchParams.get("callbackUrl")));
-      router.refresh();
+      window.location.assign("/dashboard/admin/home");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Login gagal.");
     }

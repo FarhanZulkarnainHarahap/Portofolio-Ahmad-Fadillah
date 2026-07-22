@@ -7,6 +7,7 @@ import {
   FiBarChart2,
   FiBookOpen,
   FiBriefcase,
+  FiInstagram,
   FiMail,
   FiPhone,
   FiUsers,
@@ -84,7 +85,7 @@ export async function HomePage() {
         </section>
       ) : null}
 
-      <section className="section-shell grid gap-5 py-5 lg:grid-cols-3">
+      <section className="section-shell grid min-w-0 gap-5 py-5 lg:grid-cols-3">
         {expertiseItems.length ? (
           <article className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
             <SectionTitle icon={<FiBookOpen />} title="Spesialisasi & Tools" />
@@ -139,7 +140,7 @@ export async function HomePage() {
             </div>
           </article>
         ) : (
-          <article className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
+          <article className="min-w-0 rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-5 sm:p-6">
             <SectionTitle icon={<FiAward />} title="Konten Profesional" />
             <p className="mt-5 text-sm leading-7 text-[color:var(--text-secondary)]">
               Proyek, pencapaian, artikel, dan sertifikat akan ditampilkan saat konten publiknya sudah siap.
@@ -149,9 +150,9 @@ export async function HomePage() {
       </section>
 
       <section className="section-shell pb-7">
-        <div className="grid rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] md:grid-cols-3">
+        <div className="grid min-w-0 rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] md:grid-cols-3">
           {staticContactLinks.map((item) => (
-            <ContactStrip key={item.label} icon={contactIcon(item.type)} label={item.label} value={item.value} />
+            <ContactStrip key={item.label} href={item.href} icon={contactIcon(item.type)} label={item.label} value={item.value} />
           ))}
         </div>
       </section>
@@ -180,13 +181,13 @@ function StatBox({ stat, icon }: { stat: Statistic; icon: number }) {
   const Icon = [FiUsers, FiBriefcase, FiBookOpen, FiAward][icon] ?? FiBarChart2;
   const value = stat.unit === "S1" ? "S1" : `${stat.value}${stat.unit ?? ""}`;
   return (
-    <div className="grid gap-3 border-b border-r border-[color:var(--border)] p-4 even:border-r-0 last:border-b-0 sm:grid-cols-[56px_1fr] sm:p-5 lg:border-b-0 lg:last:border-r-0">
+    <div className="grid min-w-0 gap-3 border-b border-r border-[color:var(--border)] p-4 even:border-r-0 last:border-b-0 sm:grid-cols-[56px_minmax(0,1fr)] sm:p-5 lg:border-b-0 lg:last:border-r-0">
       <span className="grid size-12 place-items-center rounded-full bg-[color:var(--surface-soft)] text-xl text-[color:var(--primary)] sm:size-14 sm:text-2xl">
         <Icon aria-hidden />
       </span>
-      <div>
+      <div className="min-w-0">
         <p className="font-serif text-3xl font-semibold leading-none text-[color:var(--text-primary)] sm:text-4xl">{value}</p>
-        <p className="mt-1 text-xs font-semibold leading-5 text-[color:var(--text-primary)] sm:text-sm">{stat.label}</p>
+        <p className="mt-1 overflow-wrap-anywhere text-xs font-semibold leading-5 text-[color:var(--text-primary)] sm:text-sm">{stat.label}</p>
       </div>
     </div>
   );
@@ -194,8 +195,8 @@ function StatBox({ stat, icon }: { stat: Statistic; icon: number }) {
 
 function SectionTitle({ icon, title }: { icon: ReactNode; title: string }) {
   return (
-    <h2 className="flex items-center gap-3 font-serif text-2xl font-semibold text-[color:var(--text-primary)]">
-      <span className="text-[color:var(--primary)]">{icon}</span>
+    <h2 className="flex min-w-0 items-start gap-3 font-serif text-2xl font-semibold leading-tight text-[color:var(--text-primary)]">
+      <span className="mt-1 shrink-0 text-[color:var(--primary)]">{icon}</span>
       {title}
     </h2>
   );
@@ -230,15 +231,15 @@ function TextLink({ href, children, compact = false }: { href: string; children:
   );
 }
 
-function ContactStrip({ icon, label, value }: { icon: ReactNode; label: string; value: string }) {
+function ContactStrip({ href, icon, label, value }: { href: string; icon: ReactNode; label: string; value: string }) {
   return (
-    <div className="flex items-center gap-4 border-b border-[color:var(--border)] px-7 py-5 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0">
-      <span className="text-3xl text-[color:var(--primary)]">{icon}</span>
-      <div>
+    <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined} className="flex min-w-0 items-center gap-4 border-b border-[color:var(--border)] px-5 py-5 last:border-b-0 hover:bg-[color:var(--surface-soft)] sm:px-7 md:border-b-0 md:border-r md:last:border-r-0">
+      <span className="shrink-0 text-3xl text-[color:var(--primary)]">{icon}</span>
+      <div className="min-w-0">
         <p className="text-sm text-[color:var(--text-muted)]">{label}</p>
-        <p className="font-semibold text-[color:var(--text-primary)]">{value}</p>
+        <p className="overflow-wrap-anywhere font-semibold text-[color:var(--text-primary)]">{value}</p>
       </div>
-    </div>
+    </a>
   );
 }
 
@@ -249,7 +250,7 @@ function getProjectImageUrl(project: Project) {
 function contactIcon(type: string) {
   if (type === "whatsapp") return <FiPhone />;
   if (type === "email") return <FiMail />;
-  return <FiUsers />;
+  return <FiInstagram />;
 }
 
 function DotGrid({ className }: { className?: string }) {
