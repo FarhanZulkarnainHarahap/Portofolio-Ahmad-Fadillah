@@ -1,13 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { z } from "zod";
 import type { Project } from "@/types/api";
 import { createProject, updateProject } from "@/services/project.service";
+import { uploadAdminMedia } from "@/services/admin-client.service";
 
 const schema = z.object({
   title: z.string().min(3),
@@ -31,6 +32,7 @@ type ProjectValues = z.input<typeof schema>;
 
 export function ProjectForm({ mode, project }: { mode: "create" | "edit"; project?: Project }) {
   const router = useRouter();
+  const [documentFile, setDocumentFile] = useState<File | null>(null);
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<ProjectValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -53,7 +55,15 @@ export function ProjectForm({ mode, project }: { mode: "create" | "edit"; projec
   });
 
   async function onSubmit(values: z.output<typeof schema>) {
-    const payload = { ...values, slug: values.slug || slugify(values.title) };
+    const payload: Record<string, unknown> = { ...values, slug: values.slug || slugify(values.title) };
+    if (documentFile) {
+      const formData = new FormData();
+      formData.append("file", documentFile);
+      formData.append("folder", "projects");
+      const media = await uploadAdminMedia(formData);
+      payload.documentUrl = media.secureUrl;
+    }
+
     if (mode === "create") {
       await createProject(payload);
       toast.success("Project created.");
@@ -79,6 +89,29 @@ export function ProjectForm({ mode, project }: { mode: "create" | "edit"; projec
           <Field label="Duration" error={errors.duration?.message}><input className="form-input" {...register("duration")} /></Field>
           <Field label="Role" error={errors.role?.message}><input className="form-input" {...register("role")} /></Field>
         </div>
+      </FormSection>
+
+      <FormSection title="Project file" description="Upload PDF case study atau dokumen proyek. File akan disimpan ke Cloudinary.">
+        <Field label="File PDF proyek">
+          <input
+            accept="application/pdf"
+            className="form-input cursor-pointer file:mr-4 file:rounded-full file:border-0 file:bg-[color:var(--primary)] file:px-4 file:py-2 file:text-sm file:font-bold file:text-[color:var(--text-on-primary)]"
+            type="file"
+            onChange={(event) => setDocumentFile(event.target.files?.[0] ?? null)}
+          />
+          <span className="text-xs font-medium leading-5 text-[color:var(--text-muted)]">
+            {documentFile
+              ? `File dipilih: ${documentFile.name}`
+              : project?.documentUrl
+                ? "Biarkan kosong jika tidak ingin mengganti file proyek."
+                : "Upload PDF proyek. Tidak perlu input URL manual."}
+          </span>
+          {project?.documentUrl ? (
+            <a className="w-fit text-xs font-bold text-[color:var(--primary)] hover:underline" href={project.documentUrl} target="_blank" rel="noreferrer">
+              Lihat file saat ini
+            </a>
+          ) : null}
+        </Field>
       </FormSection>
 
       <FormSection title="Project story" description="Narasi case study yang akan tampil di halaman detail publik.">

@@ -97,6 +97,7 @@ export type Project = {
   implementation?: string | null;
   resultsText?: string | null;
   lessons?: string | null;
+  documentUrl?: string | null;
   isFeatured?: boolean;
   isPublished?: boolean;
   category?: { name: string; slug: string } | null;

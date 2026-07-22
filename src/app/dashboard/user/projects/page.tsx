@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FiArrowRight, FiBarChart2, FiBookOpen, FiBriefcase, FiStar, FiTarget, FiUsers } from "react-icons/fi";
+import type { ReactNode } from "react";
+import { FiArrowRight, FiBarChart2, FiBookOpen, FiBriefcase, FiFileText, FiStar, FiTarget, FiUsers } from "react-icons/fi";
 import type { Project } from "@/types/api";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { PageHeader } from "@/components/user/PageHeader";
@@ -36,17 +37,18 @@ function FeaturedProject({ project }: { project: Project }) {
   const imageUrl = getProjectImageUrl(project);
 
   return (
-    <Link href={`/projects/${project.slug}`} className="group grid overflow-hidden rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] lg:grid-cols-[0.9fr_1.25fr]">
+    <ProjectAction project={project} className="group grid overflow-hidden rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] lg:grid-cols-[0.9fr_1.25fr]">
       <div className="relative grid min-h-[290px] place-items-center bg-[color:var(--surface-soft)] text-5xl text-[color:var(--primary)]">
-        {imageUrl ? <Image src={imageUrl} alt={project.title} fill sizes="(min-width: 1024px) 42vw, 100vw" className="object-cover object-center transition group-hover:scale-[1.03]" /> : <FiBriefcase aria-hidden />}
+        {imageUrl ? <Image src={imageUrl} alt={project.title} fill sizes="(min-width: 1024px) 42vw, 100vw" className="object-cover object-center transition group-hover:scale-[1.03]" /> : project.documentUrl ? <FiFileText aria-hidden /> : <FiBriefcase aria-hidden />}
         <span className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-[6px] bg-[color:var(--surface)] px-4 py-2 text-sm font-semibold text-[color:var(--primary)]">
-          <FiStar /> Proyek Unggulan
+          {project.documentUrl ? <FiFileText /> : <FiStar />} {project.documentUrl ? "File Proyek" : "Proyek Unggulan"}
         </span>
       </div>
       <div className="p-8 lg:p-12">
         <h2 className="font-serif text-4xl font-semibold leading-tight text-[color:var(--text-primary)]">{project.title}</h2>
         <p className="mt-5 max-w-2xl leading-7 text-[color:var(--text-secondary)]">{project.shortDescription}</p>
         <div className="mt-5 flex flex-wrap gap-2">
+          {project.documentUrl ? <span className="rounded-[6px] bg-[color:var(--primary-soft)] px-3 py-1 text-sm font-semibold text-[color:var(--primary)]">PDF</span> : null}
           {project.category?.name ? <span className="rounded-[6px] bg-[color:var(--surface-soft)] px-3 py-1 text-sm text-[color:var(--text-secondary)]">{project.category.name}</span> : null}
           {project.year ? <span className="rounded-[6px] bg-[color:var(--surface-soft)] px-3 py-1 text-sm text-[color:var(--text-secondary)]">{project.year}</span> : null}
         </div>
@@ -61,9 +63,9 @@ function FeaturedProject({ project }: { project: Project }) {
             </div>
           ))}
         </div>
-        <span className="mt-8 inline-flex items-center gap-3 font-semibold text-[color:var(--primary)]">Lihat Detail Proyek <FiArrowRight /></span>
+        <span className="mt-8 inline-flex items-center gap-3 font-semibold text-[color:var(--primary)]">{project.documentUrl ? "Unduh File Proyek" : "Lihat Detail Proyek"} <FiArrowRight /></span>
       </div>
-    </Link>
+    </ProjectAction>
   );
 }
 
@@ -71,16 +73,33 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const imageUrl = getProjectImageUrl(project);
 
   return (
-    <Link href={`/projects/${project.slug}`} className="group overflow-hidden rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] transition hover:-translate-y-1 hover:border-[color:var(--primary)]">
+    <ProjectAction project={project} className="group overflow-hidden rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] transition hover:-translate-y-1 hover:border-[color:var(--primary)]">
       <div className="relative grid aspect-[4/3] place-items-center bg-[color:var(--surface-soft)] text-4xl text-[color:var(--primary)]">
-        {imageUrl ? <Image src={imageUrl} alt={project.title} fill sizes="20vw" className="object-cover object-center transition group-hover:scale-[1.04]" /> : iconFor(index)}
+        {imageUrl ? <Image src={imageUrl} alt={project.title} fill sizes="20vw" className="object-cover object-center transition group-hover:scale-[1.04]" /> : project.documentUrl ? <FiFileText aria-hidden /> : iconFor(index)}
       </div>
       <div className="p-5">
         <span className="grid size-12 place-items-center rounded-full bg-[color:var(--surface-soft)] text-xl text-[color:var(--primary)]">{iconFor(index)}</span>
         <h3 className="mt-4 font-serif text-2xl font-semibold leading-tight text-[color:var(--text-primary)]">{project.title}</h3>
         <p className="mt-3 text-sm leading-6 text-[color:var(--text-secondary)]">{project.shortDescription}</p>
-        <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--primary)]">Lihat Detail <FiArrowRight /></span>
+        {project.documentUrl ? <span className="mt-4 inline-flex rounded-[6px] bg-[color:var(--primary-soft)] px-3 py-1 text-xs font-semibold text-[color:var(--primary)]">PDF</span> : null}
+        <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--primary)]">{project.documentUrl ? "Unduh File" : "Lihat Detail"} <FiArrowRight /></span>
       </div>
+    </ProjectAction>
+  );
+}
+
+function ProjectAction({ project, className, children }: { project: Project; className: string; children: ReactNode }) {
+  if (project.documentUrl) {
+    return (
+      <a href={project.documentUrl} target="_blank" rel="noreferrer" download className={className}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={`/projects/${project.slug}`} className={className}>
+      {children}
     </Link>
   );
 }

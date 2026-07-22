@@ -7,6 +7,7 @@ import {
   FiBarChart2,
   FiBookOpen,
   FiBriefcase,
+  FiFileText,
   FiInstagram,
   FiMail,
   FiPhone,
@@ -205,21 +206,25 @@ function SectionTitle({ icon, title }: { icon: ReactNode; title: string }) {
 function FeaturedProject({ project }: { project: Project }) {
   const metric = project.metrics?.[0];
   const imageUrl = getProjectImageUrl(project);
+  const actionHref = project.documentUrl ?? `/projects/${project.slug}`;
+  const externalFile = Boolean(project.documentUrl);
   return (
-    <Link href={`/projects/${project.slug}`} className="mt-5 grid gap-5 sm:grid-cols-[210px_1fr]">
+    <a href={actionHref} target={externalFile ? "_blank" : undefined} rel={externalFile ? "noreferrer" : undefined} download={externalFile} className="mt-5 grid gap-5 sm:grid-cols-[210px_1fr]">
       <div className="relative grid min-h-36 place-items-center overflow-hidden rounded-[8px] bg-[color:var(--surface-soft)] text-3xl text-[color:var(--primary)]">
-        {imageUrl ? <Image src={imageUrl} alt={project.title} fill sizes="210px" className="object-cover object-center" /> : <FiBriefcase aria-hidden />}
+        {imageUrl ? <Image src={imageUrl} alt={project.title} fill sizes="210px" className="object-cover object-center" /> : project.documentUrl ? <FiFileText aria-hidden /> : <FiBriefcase aria-hidden />}
         <div className="absolute inset-0 bg-[color:var(--primary)]/12" />
       </div>
       <div>
         <p className="font-serif text-2xl font-semibold leading-tight text-[color:var(--text-primary)]">{project.title}</p>
         <p className="mt-3 text-sm leading-6 text-[color:var(--text-secondary)]">{project.shortDescription}</p>
         <div className="mt-4 flex flex-wrap gap-2">
+          {project.documentUrl ? <span className="rounded-[6px] bg-[color:var(--primary-soft)] px-3 py-1 text-xs font-semibold text-[color:var(--primary)]">File PDF</span> : null}
           {project.category?.name ? <span className="rounded-[6px] bg-[color:var(--surface-soft)] px-3 py-1 text-xs text-[color:var(--text-secondary)]">{project.category.name}</span> : null}
           {metric ? <span className="rounded-[6px] bg-[color:var(--surface-soft)] px-3 py-1 text-xs text-[color:var(--text-secondary)]">{metric.value}{metric.unit ?? ""} {metric.label}</span> : null}
         </div>
+        <span className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-[color:var(--primary)]">{project.documentUrl ? "Unduh file proyek" : "Lihat detail proyek"} <FiArrowRight aria-hidden /></span>
       </div>
-    </Link>
+    </a>
   );
 }
 

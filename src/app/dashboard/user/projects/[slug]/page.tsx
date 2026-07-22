@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FiArrowLeft, FiBriefcase, FiCheckCircle, FiTarget, FiTrendingUp } from "react-icons/fi";
+import { FiArrowLeft, FiBriefcase, FiCheckCircle, FiDownload, FiTarget, FiTrendingUp } from "react-icons/fi";
 import type { ReactNode } from "react";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Section } from "@/components/user/Section";
@@ -28,6 +28,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <p className="editorial-label">{project.category?.name ?? "Case Study"}</p>
               <h1 className="mt-4 overflow-wrap-anywhere font-heading text-[clamp(2.5rem,10vw,4rem)] font-extrabold leading-tight tracking-normal text-[color:var(--text-primary)]">{project.title}</h1>
               {project.shortDescription ? <p className="mt-5 max-w-3xl text-lg leading-8 text-[color:var(--text-secondary)]">{project.shortDescription}</p> : null}
+              {project.documentUrl ? (
+                <a className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-[color:var(--text-on-primary)]" href={project.documentUrl} target="_blank" rel="noreferrer" download>
+                  <FiDownload aria-hidden />
+                  Unduh File Proyek
+                </a>
+              ) : null}
             </div>
             <div className="premium-card grid gap-4 p-5 sm:grid-cols-2">
               {info.map((item) => <Info key={item.label} label={item.label} value={item.value} />)}
