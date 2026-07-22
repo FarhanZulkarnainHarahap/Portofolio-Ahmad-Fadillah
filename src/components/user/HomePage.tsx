@@ -11,60 +11,44 @@ import {
   FiPhone,
   FiUsers,
 } from "react-icons/fi";
-import type { Profile, Project, Statistic } from "@/types/api";
-import { EmptyState } from "@/components/ui/EmptyState";
+import type { Project, Statistic } from "@/types/api";
 import { getPublicAchievements } from "@/services/achievement.service";
 import { getPublicCertificates } from "@/services/certificate.service";
-import { getPublicProfile } from "@/services/profile.server-service";
 import { getFeaturedProjects } from "@/services/project.server-service";
-import { getPublicSettings } from "@/services/settings.service";
 import { getPublicTools } from "@/services/tools.server-service";
 import { apiGet } from "@/lib/server-api-client";
+import { staticContactLinks, staticProfile } from "@/lib/static-profile";
 
 export async function HomePage() {
-  const [profile, stats, expertise, projects, achievements, certifications, settings] = await Promise.all([
-    getPublicProfile().catch(() => null),
+  const [stats, expertise, projects, achievements, certifications] = await Promise.all([
     apiGet<Statistic[]>("/public/statistics").catch(() => null),
     getPublicTools().catch(() => null),
     getFeaturedProjects(4).catch(() => null),
     getPublicAchievements().catch(() => null),
     getPublicCertificates().catch(() => null),
-    getPublicSettings().catch(() => null),
   ]);
 
-  const person = profile?.data ?? null;
   const statisticItems = stats?.data ?? [];
   const expertiseItems = expertise?.data ?? [];
   const projectItems = projects?.data ?? [];
   const achievementItems = achievements?.data ?? [];
   const certificateCount = certifications?.data?.length ?? 0;
-  const heroImage = person ? getProfileImageUrl(person, "hero") ?? getProfileImageUrl(person, "profile") : null;
-  const contactItems = person ? getContactItems(person, settings?.data.socials ?? []) : [];
-
-  if (!person) {
-    return (
-      <section className="section-shell py-12">
-        <EmptyState title="Profil belum dipublikasikan." description="Konten beranda akan tersedia setelah profil utama dipublikasikan." />
-      </section>
-    );
-  }
+  const heroImage = staticProfile.imageUrl;
 
   return (
     <div>
       <section className="relative overflow-hidden border-b border-[color:var(--border)]">
         <div className={`section-shell grid gap-8 py-8 lg:min-h-[660px] lg:items-center lg:gap-10 lg:py-0 ${heroImage ? "lg:grid-cols-[0.92fr_1.08fr]" : ""}`}>
           <div className="relative z-10 py-4 lg:py-20">
-            {person.availabilityStatus ? (
-              <p className="inline-flex rounded-full bg-[color:var(--surface-soft)] px-4 py-2 text-sm font-semibold text-[color:var(--primary)]">
-                {person.availabilityStatus}
-              </p>
-            ) : null}
+            <p className="inline-flex rounded-full bg-[color:var(--surface-soft)] px-4 py-2 text-sm font-semibold text-[color:var(--primary)]">
+              Human Resources • People Growth
+            </p>
             <h1 className="mt-5 max-w-3xl overflow-wrap-anywhere font-serif text-[clamp(3.35rem,14vw,5.25rem)] font-semibold leading-[0.95] tracking-normal text-[color:var(--text-primary)] lg:text-[clamp(4.75rem,6vw,6.75rem)]">
-              {person.name}
+              {staticProfile.name}
             </h1>
-            {person.headline ? <p className="mt-4 font-serif text-2xl text-[color:var(--primary)]">{person.headline}</p> : null}
-            {person.headline || person.shortDescription ? <div className="mt-5 h-px w-24 bg-[color:var(--primary)]" /> : null}
-            {person.shortDescription ? <p className="mt-6 max-w-xl text-base leading-8 text-[color:var(--text-primary)]">{person.shortDescription}</p> : null}
+            <p className="mt-4 font-serif text-2xl text-[color:var(--primary)]">{staticProfile.headline}</p>
+            <div className="mt-5 h-px w-24 bg-[color:var(--primary)]" />
+            <p className="mt-6 max-w-xl text-base leading-8 text-[color:var(--text-primary)]">{staticProfile.shortDescription}</p>
             <div className="mt-8 flex flex-wrap items-center gap-5">
               <HeroButton href="/about" icon={<FiUsers />}>Tentang Saya</HeroButton>
               <HeroButton href="/experience" variant="outline" icon={<FiBriefcase />}>Lihat Pengalaman</HeroButton>
@@ -78,7 +62,7 @@ export async function HomePage() {
               <div className="absolute inset-y-0 left-0 hidden w-[120%] rounded-l-[48%] bg-[color:var(--surface-soft)] lg:block" />
               <Image
                 src={heroImage}
-                alt={`Potret ${person.name}`}
+                alt={`Potret ${staticProfile.name}`}
                 fill
                 priority
                 sizes="(min-width: 1024px) 52vw, 90vw"
@@ -164,15 +148,13 @@ export async function HomePage() {
         )}
       </section>
 
-      {contactItems.length ? (
-        <section className="section-shell pb-7">
-          <div className="grid rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] md:grid-cols-3">
-            {contactItems.slice(0, 3).map((item) => (
-              <ContactStrip key={item.label} icon={item.icon} label={item.label} value={item.value} />
-            ))}
-          </div>
-        </section>
-      ) : null}
+      <section className="section-shell pb-7">
+        <div className="grid rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] md:grid-cols-3">
+          {staticContactLinks.map((item) => (
+            <ContactStrip key={item.label} icon={contactIcon(item.type)} label={item.label} value={item.value} />
+          ))}
+        </div>
+      </section>
 
       {certificateCount ? (
         <p className="sr-only">{certificateCount} sertifikasi profesional tersedia di halaman sertifikat.</p>
@@ -260,24 +242,14 @@ function ContactStrip({ icon, label, value }: { icon: ReactNode; label: string; 
   );
 }
 
-function getProfileImageUrl(profile: Profile, type: "profile" | "hero") {
-  return type === "hero"
-    ? profile.heroImageUrl ?? profile.heroImage?.secureUrl ?? null
-    : profile.profileImageUrl ?? profile.profileImage?.secureUrl ?? null;
-}
-
 function getProjectImageUrl(project: Project) {
   return project.thumbnail?.secureUrl ?? project.images?.[0]?.secureUrl ?? project.images?.[0]?.media?.secureUrl ?? null;
 }
 
-function getContactItems(profile: Profile, socials: { label: string; url: string }[]) {
-  const items: Array<{ label: string; value: string; icon: ReactNode } | null> = [
-    ...socials.map((item) => ({ label: item.label, value: item.url, icon: <FiUsers /> })),
-    profile.whatsapp ? { label: "WhatsApp", value: profile.whatsapp, icon: <FiPhone /> } : null,
-    profile.publicEmail ? { label: "Email", value: profile.publicEmail, icon: <FiMail /> } : null,
-  ];
-
-  return items.filter((item): item is { label: string; value: string; icon: ReactNode } => Boolean(item));
+function contactIcon(type: string) {
+  if (type === "whatsapp") return <FiPhone />;
+  if (type === "email") return <FiMail />;
+  return <FiUsers />;
 }
 
 function DotGrid({ className }: { className?: string }) {

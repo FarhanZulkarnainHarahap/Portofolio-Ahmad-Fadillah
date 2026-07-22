@@ -1,54 +1,38 @@
 import Image from "next/image";
 import { FiBookOpen, FiMail, FiMapPin, FiPhone, FiShield } from "react-icons/fi";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { PageHeader } from "@/components/user/PageHeader";
 import { Section } from "@/components/user/Section";
-import { getPublicProfile } from "@/services/profile.server-service";
 import { getPublicTools } from "@/services/tools.server-service";
-import type { Profile } from "@/types/api";
+import { staticProfile } from "@/lib/static-profile";
 
 export default async function AboutPage() {
-  const [profile, expertise] = await Promise.all([
-    getPublicProfile().catch(() => null),
+  const [expertise] = await Promise.all([
     getPublicTools().catch(() => null),
   ]);
-  const person = profile?.data ?? null;
   const tools = expertise?.data?.filter((item) => item.category?.name === "Tools") ?? [];
-  const values = getProfileValues(person);
-  const imageUrl = person ? getProfileImageUrl(person) : null;
-
-  if (!person) {
-    return (
-      <>
-        <PageHeader title="Tentang Saya" description="Profil, nilai, spesialisasi, dan arah karier di bidang Human Resources." eyebrow="Human Resources • People Growth" />
-        <Section title="Profil belum dipublikasikan.">
-          <EmptyState title="Belum ada profil publik." description="Konten profil akan tersedia setelah data utama dipublikasikan." />
-        </Section>
-      </>
-    );
-  }
+  const values = ["Integritas", "Kolaborasi", "Pengembangan", "Dampak"];
 
   return (
     <>
       <PageHeader title="Tentang Saya" description="Profil, nilai, spesialisasi, dan arah karier saya di bidang Human Resources." eyebrow="Human Resources • People Growth" />
-      <Section title={person.name} description={person.about ?? person.shortDescription ?? undefined}>
+      <Section title={staticProfile.name} description={staticProfile.about}>
         <div className="grid gap-10 lg:grid-cols-[1fr_0.82fr] lg:items-start">
           <div>
-            {person.headline ? <p className="font-serif text-2xl text-[color:var(--primary)]">{person.headline}</p> : null}
-            {person.headline ? <div className="mt-5 h-px w-20 bg-[color:var(--primary)]" /> : null}
+            <p className="font-serif text-2xl text-[color:var(--primary)]">{staticProfile.headline}</p>
+            <div className="mt-5 h-px w-20 bg-[color:var(--primary)]" />
             <div className="mt-8 grid gap-4 sm:grid-cols-2">
-              {person.professionalTitle ? <InfoCard icon={<FiBookOpen />} label="Profesi" value={person.professionalTitle} /> : null}
-              {person.location ? <InfoCard icon={<FiMapPin />} label="Lokasi" value={person.location} /> : null}
-              {person.publicEmail ? <InfoCard icon={<FiMail />} label="Email" value={person.publicEmail} /> : null}
-              {person.whatsapp ? <InfoCard icon={<FiPhone />} label="WhatsApp" value={person.whatsapp} /> : null}
+              <InfoCard icon={<FiBookOpen />} label="Profesi" value={staticProfile.professionalTitle} />
+              <InfoCard icon={<FiMapPin />} label="Lokasi" value={staticProfile.location} />
+              <InfoCard icon={<FiMail />} label="Email" value={staticProfile.publicEmail} />
+              <InfoCard icon={<FiPhone />} label="WhatsApp" value={staticProfile.whatsapp} />
             </div>
           </div>
-          {imageUrl ? <div className="relative">
+          <div className="relative">
             <div className="relative aspect-[5/6] overflow-hidden rounded-[8px] border-[12px] border-[color:var(--surface-soft)] bg-[color:var(--surface-soft)]">
-              <Image src={imageUrl} alt={`Potret ${person.name}`} fill sizes="(min-width: 1024px) 42vw, 100vw" className="object-cover object-center" />
+              <Image src={staticProfile.imageUrl} alt={`Potret ${staticProfile.name}`} fill sizes="(min-width: 1024px) 42vw, 100vw" className="object-cover object-center" />
             </div>
             <DotGrid className="absolute -right-10 bottom-12 hidden lg:grid" />
-          </div> : null}
+          </div>
         </div>
       </Section>
 
@@ -89,15 +73,6 @@ function InfoCard({ icon, label, value, detail }: { icon: React.ReactNode; label
       </div>
     </article>
   );
-}
-
-function getProfileImageUrl(profile: Profile) {
-  return profile.profileImageUrl ?? profile.profileImage?.secureUrl ?? profile.heroImageUrl ?? profile.heroImage?.secureUrl ?? null;
-}
-
-function getProfileValues(profile: Profile | null) {
-  if (!profile || !Array.isArray(profile.professionalValues)) return [];
-  return profile.professionalValues.filter((item): item is string => typeof item === "string" && item.trim().length > 0);
 }
 
 function DotGrid({ className }: { className?: string }) {

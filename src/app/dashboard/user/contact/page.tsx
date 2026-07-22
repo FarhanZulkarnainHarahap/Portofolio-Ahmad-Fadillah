@@ -2,23 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { FiArrowRight, FiExternalLink, FiMail, FiMapPin, FiPhone, FiUsers } from "react-icons/fi";
 import type { ReactNode } from "react";
-import { EmptyState } from "@/components/ui/EmptyState";
 import { PageHeader } from "@/components/user/PageHeader";
 import { Section } from "@/components/user/Section";
 import { ContactForm } from "@/components/forms/ContactForm";
-import { getPublicProfile } from "@/services/profile.server-service";
-import { getPublicSettings } from "@/services/settings.service";
-import type { Profile } from "@/types/api";
+import { staticContactLinks, staticProfile } from "@/lib/static-profile";
 
 export default async function ContactPage() {
-  const [profile, settings] = await Promise.all([
-    getPublicProfile().catch(() => null),
-    getPublicSettings().catch(() => null),
-  ]);
-  const person = profile?.data ?? null;
-  const contactItems = getContactItems(person, settings?.data.socials ?? []);
-  const imageUrl = person ? getProfileImageUrl(person) : null;
-
   return (
     <>
       <PageHeader title="Kontak" description="Kirim pesan profesional untuk peluang kerja, kolaborasi, atau diskusi Human Resources." eyebrow="Human Resources • People Growth" />
@@ -26,30 +15,29 @@ export default async function ContactPage() {
         <div className="grid gap-8 lg:grid-cols-[0.82fr_1.08fr]">
           <div className="grid gap-5">
             <div className="rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-6">
-              {contactItems.length ? (
-                <div className="grid gap-5">
-                  {contactItems.map((item) => (
-                    <ContactItem key={`${item.label}-${item.value}`} icon={item.icon} label={item.label} value={item.value} href={item.href} helper={item.helper} />
-                  ))}
-                </div>
-              ) : (
-                <EmptyState title="Kontak publik belum tersedia." description="Kontak akan tersedia setelah informasi publik dipublikasikan." />
-              )}
+              <div className="grid gap-5">
+                {staticContactLinks.map((item) => (
+                  <ContactItem key={`${item.label}-${item.value}`} icon={contactIcon(item.type)} label={item.label} value={item.value} href={item.href} />
+                ))}
+                <ContactItem icon={<FiPhone />} label="WhatsApp" value={staticProfile.whatsapp} href={`https://wa.me/${staticProfile.whatsapp}`} />
+                <ContactItem icon={<FiMail />} label="Email" value={staticProfile.publicEmail} href={`mailto:${staticProfile.publicEmail}`} />
+                <ContactItem icon={<FiMapPin />} label="Lokasi" value={staticProfile.location} />
+              </div>
             </div>
 
-            {person ? <article className={`grid gap-5 rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-5 ${imageUrl ? "sm:grid-cols-[190px_1fr]" : ""}`}>
-              {imageUrl ? <div className="relative aspect-[4/5] overflow-hidden rounded-[8px] bg-[color:var(--surface-soft)]">
-                <Image src={imageUrl} alt={`Potret ${person.name}`} fill sizes="190px" className="object-cover object-center" />
-              </div> : null}
+            <article className="grid gap-5 rounded-[8px] border border-[color:var(--border)] bg-[color:var(--surface)] p-5 sm:grid-cols-[190px_1fr]">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[8px] bg-[color:var(--surface-soft)]">
+                <Image src={staticProfile.imageUrl} alt={`Potret ${staticProfile.name}`} fill sizes="190px" className="object-cover object-center" />
+              </div>
               <div className="flex flex-col justify-center">
-                <h2 className="font-serif text-3xl font-semibold text-[color:var(--text-primary)]">{person.name}</h2>
-                {person.headline ? <p className="mt-1 font-serif text-lg text-[color:var(--primary)]">{person.headline}</p> : null}
-                {person.shortDescription ? <p className="mt-4 text-sm leading-6 text-[color:var(--text-secondary)]">{person.shortDescription}</p> : null}
+                <h2 className="font-serif text-3xl font-semibold text-[color:var(--text-primary)]">{staticProfile.name}</h2>
+                <p className="mt-1 font-serif text-lg text-[color:var(--primary)]">{staticProfile.headline}</p>
+                <p className="mt-4 text-sm leading-6 text-[color:var(--text-secondary)]">{staticProfile.shortDescription}</p>
                 <Link href="/about" className="mt-5 inline-flex w-fit items-center gap-3 rounded-[6px] border border-[color:var(--primary)] px-4 py-2 text-sm font-semibold text-[color:var(--primary)] hover:bg-[color:var(--primary-soft)]">
                   Lihat Portofolio <FiArrowRight />
                 </Link>
               </div>
-            </article> : null}
+            </article>
           </div>
           <ContactForm />
         </div>
@@ -74,45 +62,8 @@ function ContactItem({ icon, label, value, helper, href }: { icon: ReactNode; la
   return href ? <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined}>{content}</a> : content;
 }
 
-function getProfileImageUrl(profile: Profile) {
-  return profile.profileImageUrl ?? profile.profileImage?.secureUrl ?? profile.heroImageUrl ?? profile.heroImage?.secureUrl ?? null;
-}
-
-function getContactItems(profile: Profile | null, socials: { label: string; url: string }[]) {
-  const items: { label: string; value: string; href?: string; icon: ReactNode; helper?: string }[] = socials.map((item) => ({
-    label: item.label,
-    value: item.url,
-    href: item.url,
-    icon: <FiUsers />,
-  }));
-
-  if (profile?.whatsapp) {
-    items.push({
-      label: "WhatsApp",
-      value: profile.whatsapp,
-      href: `https://wa.me/${profile.whatsapp.replace(/\D/g, "")}`,
-      icon: <FiPhone />,
-    });
-  }
-
-  if (profile?.publicEmail) {
-    items.push({
-      label: "Email",
-      value: profile.publicEmail,
-      href: `mailto:${profile.publicEmail}`,
-      icon: <FiMail />,
-    });
-  }
-
-  if (profile?.location) {
-    items.push({
-      label: "Lokasi",
-      value: profile.location,
-      href: "",
-      icon: <FiMapPin />,
-      helper: undefined,
-    });
-  }
-
-  return items;
+function contactIcon(type: string) {
+  if (type === "whatsapp") return <FiPhone />;
+  if (type === "email") return <FiMail />;
+  return <FiUsers />;
 }
