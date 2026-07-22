@@ -19,10 +19,10 @@ export async function AdminResourceList({ title, description, resource, createHr
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+        <div className="min-w-0">
           <p className="editorial-label">Module</p>
-          <h1 className="mt-3 font-heading text-4xl font-extrabold capitalize">{title}</h1>
+          <h1 className="mt-3 overflow-wrap-anywhere font-heading text-3xl font-extrabold capitalize sm:text-4xl">{title}</h1>
           <p className="mt-2 text-sm text-[color:var(--text-secondary)]">{description}</p>
         </div>
         {createHref ? <Link className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-[color:var(--text-on-primary)]" href={createHref}><FiPlus />Tambah</Link> : null}
@@ -40,17 +40,17 @@ export async function AdminResourceList({ title, description, resource, createHr
 
 function AdminResourceCard({ row, resource, editHrefBase }: { row: AdminResourceRow; resource: string; editHrefBase?: string }) {
   return (
-    <article className="premium-card flex items-start justify-between gap-5 p-5">
-      <div className="flex gap-4">
+    <article className="premium-card flex flex-col items-stretch justify-between gap-5 p-5 sm:flex-row sm:items-start">
+      <div className="flex min-w-0 gap-4">
         <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[color:var(--primary-soft)] text-[color:var(--primary)]">
           <FiDatabase />
         </div>
-        <div>
-          <p className="font-heading text-lg font-extrabold">{itemTitle(row as { title?: string; name?: string; subject?: string })}</p>
-          <p className="mt-2 text-xs text-[color:var(--text-muted)]">ID: {row.id}</p>
+        <div className="min-w-0">
+          <p className="overflow-wrap-anywhere font-heading text-lg font-extrabold">{itemTitle(row as { title?: string; name?: string; subject?: string })}</p>
+          <p className="mt-2 overflow-wrap-anywhere text-xs text-[color:var(--text-muted)]">ID: {row.id}</p>
         </div>
       </div>
-      <div className="flex shrink-0 flex-wrap justify-end gap-2">
+      <div className="flex shrink-0 flex-wrap gap-2 sm:justify-end">
         {editHrefBase ? (
           <Link className="inline-flex min-h-9 items-center gap-2 rounded-full border border-[color:var(--border)] px-3 text-xs font-bold hover:border-[color:var(--primary)]" href={`${editHrefBase}/${row.id}/edit`}>
             <FiEdit3 />

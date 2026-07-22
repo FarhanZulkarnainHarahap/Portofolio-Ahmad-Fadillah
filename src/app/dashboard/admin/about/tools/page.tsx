@@ -11,17 +11,17 @@ export default async function AdminToolsPage() {
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+        <div className="min-w-0">
           <p className="editorial-label">About</p>
-          <h1 className="mt-3 font-heading text-4xl font-extrabold">Tools</h1>
+          <h1 className="mt-3 overflow-wrap-anywhere font-heading text-3xl font-extrabold sm:text-4xl">Tools</h1>
           <p className="mt-2 text-sm text-[color:var(--text-secondary)]">Kelola tools melalui data expertise yang tersedia dari Express API.</p>
         </div>
-        <Link className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-[color:var(--text-on-primary)]" href="/dashboard/admin/about/tools/create"><FiPlus />Tambah Tool</Link>
+        <Link className="inline-flex min-h-11 w-fit items-center gap-2 rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-[color:var(--text-on-primary)]" href="/dashboard/admin/about/tools/create"><FiPlus />Tambah Tool</Link>
       </div>
       <div className="mt-6">
         {tools.length ? (
-          <div className="overflow-hidden rounded-[var(--radius-lg)] border border-[color:var(--border)] bg-[color:var(--surface)] shadow-[var(--shadow-sm)]">
+          <div className="overflow-x-auto rounded-[var(--radius-lg)] border border-[color:var(--border)] bg-[color:var(--surface)] shadow-[var(--shadow-sm)]">
             <table className="min-w-full text-left text-sm">
               <thead className="bg-[color:var(--surface-secondary)] text-[color:var(--text-muted)]">
                 <tr><th className="px-5 py-4">Nama</th><th className="px-5 py-4">Kategori</th><th className="px-5 py-4">Tingkat</th><th className="px-5 py-4">Status</th><th className="px-5 py-4 text-right">Aksi</th></tr>

@@ -20,13 +20,13 @@ export default async function AdminDashboardPage() {
 
   return (
     <div>
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+        <div className="min-w-0">
           <p className="editorial-label">Overview</p>
-          <h1 className="mt-3 font-heading text-4xl font-extrabold">Dashboard Admin</h1>
+          <h1 className="mt-3 overflow-wrap-anywhere font-heading text-3xl font-extrabold sm:text-4xl">Dashboard Admin</h1>
           <p className="mt-2 text-sm text-[color:var(--text-secondary)]">Ringkasan konten aktual dari API dan PostgreSQL.</p>
         </div>
-        <Link className="inline-flex min-h-11 items-center rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-[color:var(--text-on-primary)]" href="/dashboard/admin/projects/create">Create project</Link>
+        <Link className="inline-flex min-h-11 w-fit items-center rounded-full bg-[color:var(--primary)] px-5 text-sm font-bold text-[color:var(--text-on-primary)]" href="/dashboard/admin/projects/create">Create project</Link>
       </div>
       <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {cards.map(([label, value, Icon, href]) => (

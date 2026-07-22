@@ -5,7 +5,7 @@ export function login(input: { email: string; password: string }) {
 }
 
 export function logout() {
-  return clientRequest("/auth/logout", { method: "POST" });
+  return fetch("/api/auth/logout", { method: "POST", credentials: "include" });
 }
 
 export function refreshSession() {
