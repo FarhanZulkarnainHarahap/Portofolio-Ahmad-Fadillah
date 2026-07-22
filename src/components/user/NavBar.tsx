@@ -3,7 +3,6 @@ import { FiDownload } from "react-icons/fi";
 import { BrandLogo } from "@/components/branding/BrandLogo";
 import { ActiveNavLinks } from "./ActiveNavLinks";
 import { MobileNav } from "./MobileNav";
-import { getPublicProfile } from "@/services/profile.server-service";
 import { getPublicSettings } from "@/services/settings.service";
 
 const fallbackItems = [
@@ -18,18 +17,14 @@ const fallbackItems = [
 ];
 
 export async function NavBar() {
-  const [settings, profile] = await Promise.all([
-    getPublicSettings().catch(() => null),
-    getPublicProfile().catch(() => null),
-  ]);
+  const settings = await getPublicSettings().catch(() => null);
   const configuredItems = settings?.data.navigation.filter((item) => item.location === "header") ?? [];
   const navItems = configuredItems.length ? configuredItems.map((item) => ({ ...item, href: normalizeUserHref(item.href) })) : fallbackItems;
-  const person = profile?.data;
 
   return (
     <header className="sticky top-0 z-[70] border-b border-[color:var(--border)] bg-[#FFFFFF] px-4 shadow-[0_1px_0_rgba(45,42,38,0.04)] dark:bg-[#2D2A26]">
       <nav className="mx-auto flex h-16 max-w-[1360px] items-center justify-between gap-3 md:h-[72px]" aria-label="Navigasi utama">
-        <BrandLogo href="/" brandName={person?.name} tagline="Human Resources Portfolio" variant="horizontal" size="md" />
+        <BrandLogo href="/" brandName="Portofolio HR" tagline="Human Resources Portfolio" variant="horizontal" size="md" />
         <ActiveNavLinks items={navItems} />
         <div className="flex items-center gap-2">
           <Link
@@ -39,7 +34,7 @@ export async function NavBar() {
             <FiDownload aria-hidden />
             <span>Download CV</span>
           </Link>
-          <MobileNav items={navItems} brandName={person?.name} tagline="Human Resources Portfolio" />
+          <MobileNav items={navItems} brandName="Portofolio HR" tagline="Human Resources Portfolio" />
         </div>
       </nav>
     </header>

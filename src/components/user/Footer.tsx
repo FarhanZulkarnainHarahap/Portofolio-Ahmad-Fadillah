@@ -5,7 +5,8 @@ import { staticContactLinks, staticProfile } from "@/lib/static-profile";
 
 export async function Footer() {
   const settings = await getPublicSettings().catch(() => null);
-  const footerNav = settings?.data.navigation.filter((item) => item.location !== "admin").map((item) => ({ ...item, href: normalizeUserHref(item.href) })) ?? [];
+  const configuredFooter = settings?.data.navigation.filter((item) => item.location === "footer") ?? [];
+  const footerNav = uniqueNav((configuredFooter.length ? configuredFooter : fallbackFooter).map((item) => ({ ...item, href: normalizeUserHref(item.href) })));
 
   return (
     <footer className="border-t border-[color:var(--border)] bg-[color:var(--surface-soft)]">
@@ -16,7 +17,7 @@ export async function Footer() {
         </div>
         <p className="font-serif text-base italic text-[color:var(--text-secondary)] lg:text-center">Empowering People, Growing Together.</p>
         <div className="grid min-w-0 grid-cols-2 gap-x-5 gap-y-3 sm:flex sm:flex-wrap lg:justify-end">
-          {(footerNav.length ? footerNav : fallbackFooter).slice(0, 8).map((item) => (
+          {footerNav.slice(0, 8).map((item) => (
             <Link className="text-xs font-medium text-[color:var(--text-primary)] hover:text-[color:var(--primary)]" key={item.id} href={item.href}>{item.label}</Link>
           ))}
           {staticContactLinks.slice(0, 1).map((item) => (
@@ -67,4 +68,14 @@ function normalizeUserHref(href: string) {
     "/dashboard/user/projects": "/projects",
   };
   return map[href] ?? href;
+}
+
+function uniqueNav<T extends { href: string; label: string }>(items: T[]) {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const key = `${item.href}:${item.label}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
 }
